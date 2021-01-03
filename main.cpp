@@ -5,7 +5,7 @@
 #include<conio.h>
 #include "Player.h"
 
-void Draw(Board b, PlayerLine p)
+void Draw(Board b, PlayerLine p
 {
 	//x and y places of each player and 'where' represents the top(1), middle(2), and bottom(3) parts of the board
 	int px[p.getNumPlayers()], py[p.getNumPlayers()], pNum[p.getNumPlayers()], where; //x is j and y is i in the for loops down below
