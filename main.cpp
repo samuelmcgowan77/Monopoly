@@ -18,7 +18,7 @@ void Draw(Board b, PlayerLine p)
 	while(player->getPlayerNum() != 1)
 	{
 		p.nextTurn();
-		player = p.frontLine();
+		player = p.frontLine()
 	}
 		
 	
