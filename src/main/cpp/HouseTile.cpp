@@ -1,8 +1,8 @@
-#include "../include/HouseTile.h"
+#include "HouseTile.h"
 
 //---------- HouseTile Class Implementation ----------
 
-HouseTile::HouseTile(std::string s, colors c, int buy, int houseCost, int base, int oneH, int twoH, int threeH, int fourH, int hotel, int mortgageCost, tiletypes e=HOUSE)
+HouseTile::HouseTile(string s, Colors c, int buy, int houseCost, int base, int oneH, int twoH, int threeH, int fourH, int hotel, int mortgageCost, Tiletypes e)
 {
 	name = s;
 	tileType = e;
@@ -67,7 +67,7 @@ void HouseTile::buyHouse()
 	}
 }
 
-colors HouseTile::getColorType() const 
+Colors HouseTile::getColorType() const 
 {
 	return colorType;
 }

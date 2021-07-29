@@ -1,8 +1,8 @@
-#include "../include/RailroadTile.h"
+#include "RailroadTile.h"
 
 //---------- RailroadTile Class Implementation ----------
 
-RailroadTile::RailroadTile(string s, int buy = 200, tiletypes e = RAILROAD)
+RailroadTile::RailroadTile(string s, int buy, Tiletypes e)
 {
 	name = s;
 	costToBuy = buy;

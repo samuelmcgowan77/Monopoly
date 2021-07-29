@@ -1,4 +1,4 @@
-#include "../include/Board.h"
+#include "Board.h"
 
 //---------- Board Class Implementation ----------
 
@@ -17,3 +17,4 @@ BoardTile *Board::getTile(int t)
 {
 	return tiles[t];
 }
+

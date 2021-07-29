@@ -1,4 +1,10 @@
+#include <string>
+#ifndef BOARD_H
+#define BOARD_H
+
 #include "BoardTile.h"
+
+#endif
 
 using namespace std;
 
@@ -13,11 +19,11 @@ class HouseTile : public BoardTile
 		int rent[6];
 		int costOfHouses;
 		int numHouses;
-		colors colorType;
+		Colors colorType;
 		bool mortgaged;
 		//HouseTile *operator=(BoardTile *b);
 	public:
-		HouseTile(std::string s, colors c, int buy, int houseCost, int base, int oneH, int twoH, int threeH, int fourH, int hotel, int mortgageCost, tiletypes e);
+		HouseTile(string s, Colors c, int buy, int houseCost, int base, int oneH, int twoH, int threeH, int fourH, int hotel, int mortgageCost, Tiletypes e=HOUSE);
 		string getOwnerName() const;
 		Player *getOwner() const;
 		void setOwner(Player *o);
@@ -26,7 +32,7 @@ class HouseTile : public BoardTile
 		int getNumHouses() const;
 		int getRent() const;
 		void buyHouse();
-		colors getColorType() const;
+		Colors getColorType() const;
 		int getRent(int roll) const;
 		int getMortgage() const;
 		bool isMortgaged() const;

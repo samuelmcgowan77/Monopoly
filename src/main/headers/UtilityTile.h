@@ -1,11 +1,19 @@
+#ifndef BOARD_H
+#define BOARD_H
+
 #include "BoardTile.h"
 
-//---------- SpecialTile Class Interface ----------
+#endif
 
-class SpecialTile : public BoardTile
+//---------- UtilityTile Class Interface ----------
+
+class UtilityTile : public BoardTile
 {
+	private:
+		int costToBuy;
+		Player *owner;
 	public:
-		SpecialTile(tiletypes e);
+		UtilityTile(string s, int buy=150, Tiletypes e=UTILITY);
 		string getOwnerName() const;
 		Player *getOwner() const;
 		void setOwner(Player *o);
@@ -14,7 +22,7 @@ class SpecialTile : public BoardTile
 		int getNumHouses() const;
 		int getRent() const;
 		void buyHouse();
-		colors getColorType() const;
+		Colors getColorType() const;
 		int getRent(int roll) const;
 		int getMortgage() const;
 		bool isMortgaged() const;

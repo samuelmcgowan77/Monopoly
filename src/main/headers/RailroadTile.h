@@ -1,4 +1,9 @@
+#ifndef BOARD_H
+#define BOARD_H
+
 #include "BoardTile.h"
+
+#endif
 
 //---------- RailroadTile Class ----------
 class RailroadTile : public BoardTile
@@ -8,7 +13,7 @@ class RailroadTile : public BoardTile
 		Player *owner;
 		int rent[4];
 	public:
-		RailroadTile(string s, int b, tiletypes e);
+		RailroadTile(string s, int buy = 200, Tiletypes e=RAILROAD);
 		string getOwnerName() const;
 		Player *getOwner() const;
 		void setOwner(Player *o);
@@ -17,7 +22,7 @@ class RailroadTile : public BoardTile
 		int getNumHouses() const;
 		int getRent() const;
 		void buyHouse();
-		colors getColorType() const;
+		Colors getColorType() const;
 		int getRent(int roll) const;
 		int getMortgage() const;
 		bool isMortgaged() const;

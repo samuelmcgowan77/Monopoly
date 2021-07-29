@@ -1,8 +1,8 @@
-#include "../include/UtilityTile.h"
+#include "UtilityTile.h"
 
 //---------- UtilityTile Class Implementation ----------
 
-UtilityTile::UtilityTile(string s, int buy = 150, tiletypes e = UTILITY)
+UtilityTile::UtilityTile(string s, int buy, Tiletypes e)
 {
 	name = s;
 	costToBuy = buy;

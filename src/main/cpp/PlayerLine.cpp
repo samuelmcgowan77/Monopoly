@@ -1,4 +1,4 @@
-#include "../include/PlayerLine.h"
+#include "PlayerLine.h"
 
 //---------- PlayerLine Class Implementation ----------
 

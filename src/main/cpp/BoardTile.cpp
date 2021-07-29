@@ -1,8 +1,8 @@
-#include "../include/BoardTile.h"
+#include "BoardTile.h"
 
 //---------- BoardTile Implementation ----------
 
-tiletypes BoardTile::getType()
+Tiletypes BoardTile::getType()
 {
 	return tileType;
 }
@@ -11,3 +11,5 @@ string BoardTile::getName()
 {
 	return name;
 }
+
+BoardTile::~BoardTile() {};

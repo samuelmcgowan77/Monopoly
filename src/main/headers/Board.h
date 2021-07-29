@@ -1,4 +1,9 @@
+#ifndef BOARD_H
+#define BOARD_H
+
 #include "BoardTile.h"
+
+#endif
 
 // ---------- Board Class ----------
 

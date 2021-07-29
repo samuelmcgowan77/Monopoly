@@ -1,6 +1,11 @@
 #include<string>
-#include "Enums.h"
+
+#ifndef PLAYER_H
+#define PLAYER_H
+
 #include "Player.h"
+
+#endif
 
 using namespace std;
 
@@ -12,9 +17,10 @@ enum Colors { PURPLE_M = 0, WHITE_M = 1, PINK_M = 2, ORANGE_M = 3, RED_M = 4, YE
 class BoardTile
 {
 	protected:
-		tiletypes tileType;
+		Tiletypes tileType;
 		string name;
 	public:
+		virtual ~BoardTile();
 		Tiletypes getType();
 		string getName();
 		virtual string getOwnerName() const;
