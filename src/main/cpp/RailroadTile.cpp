@@ -34,7 +34,7 @@ int RailroadTile::getCostToBuy() const
 	return costToBuy;
 }
 
-int RailroadTile::getRent() const 
+int RailroadTile::getRent(int roll) const 
 {
 	if (owner == NULL)
 		return 0;

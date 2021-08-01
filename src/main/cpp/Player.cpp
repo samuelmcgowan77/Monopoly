@@ -2,14 +2,14 @@
 
 //---------- Player Class Implementation ----------
 
-Player::Player(string s, int p)
+Player::Player(string s, int p, int loc)
 {
 	name = s;
 	playerNum = p;
 	money = 1500;
 	numRailroads = 0;
-	in_jail = false;
-	locationNum = 0;
+	turnsInJail = -1;
+	locationNum = loc;
 	outOfJailCard = false;
 	numUtilities = 0;
 	//debt = 0;
@@ -35,7 +35,7 @@ void Player::move(int roll)
 void Player::goToJail()
 {
 	locationNum = 10;
-	in_jail = true;
+	turnsInJail = 0;
 }
 
 void Player::goToStart()
@@ -51,6 +51,18 @@ int Player::getMoney()
 void Player::setMoney(int v)
 {
 	money = v;
+}
+
+void Player::addMoney(int v) {
+	money += v;
+}
+
+void Player::loseMoney(int v) {
+	money -= v;
+}
+
+bool Player::ableToPay(int v) {
+	return money >= v;
 }
 
 void Player::setNumRailroads(int n)
@@ -75,22 +87,29 @@ void Player::setNumUtilities(int n)
 
 bool Player::inJail()
 {
-	return in_jail;
+	return turnsInJail >= 0;
 }
 
-bool Player::getOutOfJailCard()
+bool Player::hasOutOfJailCard()
 {
 	return outOfJailCard;
 }
 
-void Player::setInJail()
+void Player::setOutOfJailCard(bool v)
 {
-	in_jail = !in_jail;
+	outOfJailCard = v;
 }
 
-void Player::setOutOfJailCard()
-{
-	outOfJailCard = !outOfJailCard;
+int Player::getTurnsInJail() {
+	return turnsInJail;
+}
+
+void Player::setTurnsInJail(int v) {
+	turnsInJail = v;
+}
+
+void Player::getOutOfJail() {
+	turnsInJail = -1;
 }
 /*
 int Player::getDebt()
@@ -117,7 +136,7 @@ int Player::getPlayerNum()
 	return playerNum;
 }
 
-void Player::gameOver() {
+void Player::exitGame() {
 	in_game = false;
 }
 

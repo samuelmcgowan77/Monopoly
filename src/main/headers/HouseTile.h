@@ -30,11 +30,11 @@ class HouseTile : public BoardTile
 		int getCostToBuy() const;
 		int getCostOfHouses() const;
 		int getNumHouses() const;
-		int getRent() const;
 		void buyHouse();
 		Colors getColorType() const;
-		int getRent(int roll) const;
+		int getRent(int roll=0) const;
 		int getMortgage() const;
 		bool isMortgaged() const;
 		void mortgage();
+		void unmortgage();
 };

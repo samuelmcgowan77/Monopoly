@@ -1,627 +1,7 @@
-#include<iostream>
+//#include<iostream>
 #include<string>
-#include<cstdlib>
 #include<queue>
-#include<conio.h>
 #include "Monopoly.h"
-
-void Draw(Board b, PlayerLine p)
-{
-	//x and y places of each player and 'where' represents the top(1), middle(2), and bottom(3) parts of the board
-	int px[p.getNumPlayers()], py[p.getNumPlayers()], pNum[p.getNumPlayers()], where; //x is j and y is i in the for loops down below
-	Player *player;
-	player = p.frontLine();
-	
-	system("cls");
-	
-	//Resets copy of line to the front
-	while(player->getPlayerNum() != 1)
-	{
-		p.nextTurn();
-		player = p.frontLine();
-	}
-		
-	
-	for(int i = 0; i < p.getNumPlayers(); i++)
-	{
-		player = p.frontLine();
-		pNum[i] = player->getPlayerNum();
-		switch(player->getLocationNum())
-		{
-			case 0:				//Starting at the bottom right of the board
-				px[i] = 111 + i;
-				py[i] = 3;
-				where = 3;
-				break;
-			case 1:
-				px[i]= 100 + i;
-				py[i] = 3;
-				where = 3;
-				break;
-			case 2:
-				px[i] = 89 + i;
-				py[i] = 3;
-				where = 3;
-				break;
-			case 3:
-				px[i] = 78 + i;
-				py[i] = 3;
-				where = 3;
-				break;
-			case 4:
-				px[i] = 67 + i;
-				py[i] = 3;
-				where = 3;
-				break;
-			case 5:
-				px[i] = 56 + i;
-				py[i] = 3;
-				where = 3;
-				break;
-			case 6:
-				px[i] = 45 + i;
-				py[i] = 3;
-				where = 3;
-				break;
-			case 7:
-				px[i] = 34 + i;
-				py[i] = 3;
-				where = 3;
-				break;
-			case 8:
-				px[i] = 23 + i;
-				py[i] = 3;
-				where = 3;
-				break;
-			case 9:
-				px[i] = 12 + i;
-				py[i] = 3;
-				where = 3;
-				break;
-			case 10:
-				if (player->inJail())
-					px[i] = 10 - i;
-				else 
-					px[i] = 1 + i;
-				py[i] = 3;
-				where = 3;
-				break;
-			case 11:			//Beginning of bottom left corner
-				px[i] = 1 + i;
-				py[i] = 43;
-				where = 2;
-				break;
-			case 12:	
-				px[i] = 1 + i;
-				py[i] = 38;
-				where = 2;
-				break;
-			case 13:
-				px[i] = 1 + i;
-				py[i] = 33;
-				where = 2;
-				break;
-			case 14:
-				px[i] = 1 + i;
-				py[i] = 28;
-				where = 2;
-				break;
-			case 15:
-				px[i] = 1 + i;
-				py[i] = 23;
-				where = 2;
-				break;
-			case 16:
-				px[i] = 1 + i;
-				py[i] = 18;
-				where = 2;
-				break;
-			case 17:
-				px[i] = 1 + i;
-				py[i] = 13;
-				where = 2;
-				break;
-			case 18:
-				px[i] = 1 + i;
-				py[i] = 8;
-				where = 2;
-				break;
-			case 19:
-				px[i] = 1 + i;
-				py[i] = 3;
-				where = 2;
-				break;
-			case 20:				//Start of the top left corner
-				px[i] = 1 + i;
-				py[i] = 3;
-				where = 1;
-				break;
-			case 21:				
-				px[i] = 12 + i;
-				py[i] = 3;
-				where = 1;
-				break;
-			case 22:				
-				px[i] = 23 + i;
-				py[i] = 3;
-				where = 1;
-				break;
-			case 23:				
-				px[i] = 34 + i;
-				py[i] = 3;
-				where = 1;
-				break;
-			case 24:				
-				px[i] = 45 + i;
-				py[i] = 3;
-				where = 1;
-				break;
-			case 25:				
-				px[i] = 56 + i;
-				py[i] = 3;
-				where = 1;
-				break;
-			case 26:				
-				px[i] = 67 + i;
-				py[i] = 3;
-				where = 1;
-				break;
-			case 27:				
-				px[i] = 78 + i;
-				py[i] = 3;
-				where = 1;
-				break;
-			case 28:				
-				px[i] = 89 + i;
-				py[i] = 3;
-				where = 1;
-				break;
-			case 29:				
-				px[i] = 100 + i;
-				py[i] = 3;
-				where = 1;
-				break;
-			case 30:				
-				px[i] = 111 + i;
-				py[i] = 3;
-				where = 1;
-				break;
-			case 31:				//Start of top right corner
-				px[i] = 111 + i;
-				py[i] = 3;
-				where = 2;
-				break;
-			case 32:
-				px[i] = 111 + i;
-				py[i] = 8;
-				where = 2;
-				break;
-			case 33:
-				px[i] = 111 + i;
-				py[i] = 13;
-				where = 2;
-				break;
-			case 34:
-				px[i] = 111 + i;
-				py[i] = 18;
-				where = 2;
-				break;
-			case 35:
-				px[i] = 111 + i;
-				py[i] = 23;
-				where = 2;
-				break;
-			case 36:
-				px[i] = 111 + i;
-				py[i] = 28;
-				where = 2;
-				break;
-			case 37:
-				px[i] = 111 + i;
-				py[i] = 33;
-				where = 2;
-				break;
-			case 38:
-				px[i] = 111 + i;
-				py[i] = 38;
-				where = 2;
-				break;
-			case 39:
-				px[i] = 111 + i;
-				py[i] = 43;
-				where = 2;
-				break;
-			default:
-				break;	
-		}
-		p.nextTurn();
-	}
-
-	//Shows the top of the board
-	for (int i = 0; i < 122; i++)
-		cout << "-";
-	cout << endl;
-	for (int i = 0; i < 4; i++)
-	{
-		for (int j = 0; j < 122; j++)
-		{
-			for (int k = 0; k < p.getNumPlayers(); k++)
-			{
-				if (j == px[k] && i == py[k] && where == 1)
-				{
-					cout << k + 1;
-					j++;
-				}
-			}
-			if (i == 0 && j == 2)
-			{
-				cout << "Free";
-				j += 3;
-			}
-			else if (i == 1 && j == 2)
-			{
-				cout << "Parking";
-				j += 6;
-			}
-			else if (i == 0 && j == 13)
-			{
-				cout << "Kentucky";
-				j += 7;
-			}
-			else if (i == 1 && (j == 13 || j == 35 || j == 68 || j == 79))
-			{
-				cout << "Avenue";
-				j += 5;
-			}
-			else if (i == 0 && j == 24)
-			{
-				cout << "Chance";
-				j += 5;
-			}
-			else if (i == 0 && j == 35)
-			{
-				cout << "Indiana";
-				j += 6;
-			}
-			else if (i == 0 && j == 46)
-			{
-				cout << "Illinois";
-				j += 7;
-			}
-			else if (i == 0 && j == 57)
-			{
-				cout << "B & O";
-				j += 4;
-			}
-			else if (i == 1 && j == 57)
-			{
-				cout << "Railroad";
-				j += 7;
-			}
-			else if (i == 0 && j == 68)
-			{
-				cout << "Atlantic";
-				j += 7;
-			}
-			else if (i == 0 && j == 79)
-			{
-				cout << "Ventnor";
-				j += 6;
-			}
-			else if (i == 0 && j == 90)
-			{
-				cout << "Water";
-				j += 4;
-			}
-			else if (i == 1 && j == 90)
-			{
-				cout << "Works";
-				j += 4;
-			}
-			else if (i == 0 && j == 101)
-			{
-				cout << "Marvin";
-				j += 5;
-			}
-			else if (i == 1 && j == 101)
-			{
-				cout << "Gardens";
-				j += 6;
-			}
-			else if (i == 0 && j == 112)
-			{
-				cout << "Go to";
-				j += 4;
-			}
-			else if (i == 1 && j == 112)
-			{
-				cout << "Jail";
-				j += 3;
-			}
-			else if (j % 11 == 0)
-				cout << "|";
-			else 
-				cout << " ";
-		}
-		cout << endl;
-	}
-	for (int i = 0; i < 122; i++)
-		cout << "-";
-	cout << endl;
-	//The sides of the board
-	for (int i = 0; i < 44; i++)
-	{
-		for (int j = 0; j < 122; j++)
-		{
-			for (int k = 0; k < p.getNumPlayers(); k++)
-			{
-				if (j == px[k] && i == py[k] && where == 2)
-				{
-					cout << k + 1;
-					j++;
-				}
-			}
-			if ((i + 1) % 5 == 0 && i != 0 && i != 45 && ((j >= 0 && j <= 11) || j >= 110))
-				cout << "-";
-			else if (i == 0 && j == 2)
-			{
-				cout << "New York";
-				j += 7;
-			}
-			else if ((i == 1 || i == 6 || i == 16 || i == 26) && (j == 2 || j == 112) )
-			{
-				cout << "Avenue";
-				j += 5;
-			}
-			else if (i == 0 && j == 112)
-			{
-				cout << "Pacific";
-				j += 6;
-			}
-			else if (i == 5 && j == 2)
-			{
-				cout << "Tenessee";
-				j += 7;
-			}
-			else if (i == 5 && j == 112)
-			{
-				cout << "N. Carol.";
-				j += 8;
-			}
-			else if (i == 10 && (j == 2 || j == 112))
-			{
-				cout << "Community";
-				j += 8;
-			}
-			else if (i == 11 && (j == 2 || j == 112))
-			{
-				cout << "Chest";
-				j += 4;
-			}
-			else if (i == 15 && j == 2)
-			{
-				cout << "St James";
-				j += 7;
-			}
-			else if (i == 16 && j == 2)
-			{
-				cout << "Place";
-				j += 4;
-			}
-			else if (i == 15 && j == 112)
-			{
-				cout << "Penn.";
-				j += 4;
-			}
-			else if (i == 20 && j == 2)
-			{
-				cout << "Penn.";
-				j += 4;
-			}
-			else if (i == 21 && j == 2)
-			{
-				cout << "Railroad";
-				j += 7;
-			}
-			else if (i == 20 && j == 112)
-			{
-				cout << "Short";
-				j += 4;
-			}
-			else if (i == 21 && j == 112)
-			{
-				cout << "Line";
-				j += 3;
-			}
-			else if (i == 25 && j == 2)
-			{
-				cout << "Virginia";
-				j += 7;
-			}
-			else if (i == 25 && j == 112)
-			{
-				cout << "Chance";
-				j += 5;
-			}
-			else if (i == 30 && j == 2)
-			{
-				cout << "States";
-				j += 5;
-			}
-			else if (i == 31 && j == 2)
-			{
-				cout << "Avenue";
-				j += 5;
-			}
-			else if (i == 30 && j == 112)
-			{
-				cout << "Park";
-				j += 3;
-			}
-			else if (i == 31 && j == 112)
-			{
-				cout << "Place";
-				j += 4;
-			}
-			else if (i == 35 && j == 2)
-			{
-				cout << "Electric";
-				j += 7;
-			}
-			else if (i == 36 && j == 2)
-			{
-				cout << "Company";
-				j += 6;
-			}
-			else if (i == 35 && j == 112)
-			{
-				cout << "Luxury";
-				j += 5;
-			}
-			else if (i == 36 && j == 112)
-			{
-				cout << "Tax";
-				j += 2;
-			}
-			else if (i == 40 && j == 2)
-			{
-				cout << "St Char.";
-				j += 7;
-			}
-			else if (i == 41 && j == 2)
-			{
-				cout << "Place";
-				j += 4;
-			}
-			else if (i == 40 && j == 112)
-			{
-				cout << "Boardwalk";
-				j += 8;
-			}
-			else if (j == 0 || j == 11 || j == 110 || j == 121)
-				cout << "|";
-			else 
-				cout << " ";
-		}
-			cout << endl;
-	}
-	//The bottom of the board
-	for (int i = 0; i < 122; i++)
-		cout << "-";
-	cout << endl;
-	for (int i = 0; i < 4; i++)
-	{
-		for (int j = 0; j < 122; j++)
-		{
-			for (int k = 0; k < p.getNumPlayers(); k++)
-			{
-				if (j == px[k] && i == py[k] && where == 3)
-				{
-					cout << k + 1;
-					j++;
-				}
-			}	
-			if (i == 0 && j == 2)
-			{
-				cout << "In Jail";
-				j += 6;
-			}
-			else if (i == 0 && j == 13)
-			{
-				cout << "Conn.";
-				j += 4;
-			}
-			else if (i == 1 && (j == 13 || j == 24 || j == 46 || j == 79 || j == 101))
-			{
-				cout << "Avenue";
-				j += 5;
-			}
-			else if (i == 0 && j == 24)
-			{
-				cout << "Vermont";
-				j += 6;
-			}
-			else if (i == 0 && j == 35)
-			{
-				cout << "Chance";
-				j += 5;
-			}
-			else if (i == 0 && j == 46)
-			{
-				cout << "Oriental";
-				j += 7;
-			}
-			else if (i == 0 && j == 57)
-			{
-				cout << "Reading";
-				j += 6;
-			}
-			else if (i == 1 && j == 57)
-			{
-				cout << "Railroad";
-				j += 7;
-			}
-			else if (i == 0 && j == 68)
-			{
-				cout << "Income";
-				j += 5;
-			}
-			else if (i == 1 && j == 68)
-			{
-				cout << "Tax";
-				j += 2;
-			}
-			else if (i == 0 && j == 79)
-			{
-				cout << "Baltic";
-				j += 5;
-			}
-			else if (i == 0 && j == 90)
-			{
-				cout << "Community";
-				j += 8;
-			}
-			else if (i == 1 && j == 90)
-			{
-				cout << "Chest";
-				j += 4;
-			}
-			else if (i == 0 && j == 101)
-			{
-				cout << "Mediter.";
-				j += 7;
-			}
-			else if (i == 0 && j == 112)
-			{
-				cout << "GO";
-				j += 1;
-			}
-			else if (j % 11 == 0)
-				cout << "|";
-			else 
-				cout << " ";
-		}
-		cout << endl;
-	}
-	for (int i = 0; i < 122; i++)
-		cout << "-";
-	cout << endl;
-}
-
-bool gameOver(PlayerLine p)
-{
-	int playersInGame = 0;
-	Player *player;
-	
-	for(int i = 0; i < p.getNumPlayers(); i++)
-	{
-		player = p.frontLine();
-		if(player->inGame())
-			playersInGame++;
-		p.nextTurn();
-	}
-	return (playersInGame > 1);
-}
 
 /*
 void landOnHouseTile(Player *p, Board* b)
@@ -836,11 +216,6 @@ void landOnHouseTile(Player *p, Board* b)
 	}
 } */
 
-void drawCommunityChest()
-{
-	
-}
-
 using namespace std;
 
 int main()
@@ -850,15 +225,11 @@ int main()
 	string answerString;
 	PlayerLine line;
 	Player *currentPlayer;
-	BoardTile *currentPosition;
-	//BoardTile *playerSpot;
-	//PropertyTile *propertySpot;
-	//HouseTile *houseSpot;
-	//RailroadTile *railroadSpot;
-	//UtilityTile *utilitySpot;
+	BoardTile *currentTile;
 	int originalLocation;
 	int numOfDoubles = 0;
 	bool madeDecision = false;
+	bool initiallyInJail = false;
 	HouseTile *sellingTile;
 	
 	//Create all of the board tiles
@@ -920,7 +291,7 @@ int main()
 	board.addTile(&ElectricCompany);
 	board.addTile(&StatesAvenue);
 	board.addTile(&VirginiaAvenue);
-	board.addTile(&PennsylvaniaAvenue);
+	board.addTile(&PennsylvaniaRailroad);
 	board.addTile(&StJamesPlace);
 	board.addTile(&chest2);
 	board.addTile(&TenesseeAvenue);
@@ -945,6 +316,8 @@ int main()
 	board.addTile(&ParkPlace);
 	board.addTile(&luxuryTax);
 	board.addTile(&Boardwalk);
+
+	//HouseTile ht = *(HouseTile *)board.getTile(1);
 	
 	cout << "Welcome to Monopoly! Enter number of players: ";
 	cin >> numPlayers;
@@ -957,162 +330,125 @@ int main()
 	{
 		cout << "Player " << i + 1 << ": ";
 		cin >> name[i];
+		getchar(); //First getchar in the game picks up enter from this cin
 	}
 	
 	for(int i = 0; i < numPlayers; i++)
-		line.addPlayer(name[i], i + 1, &start);
-		
-	// while(!gameOver(line))
-	// {
-	// 	Draw(board, line);
-	// 	currentPlayer = line.frontLine();
-		
-	// 	if (!currentPlayer->inJail())
-	// 	{
-	// 		originalLocation = currentPlayer->getLocationNum();
-	// 		cout << currentPlayer->getName() << "'s Turn. Press enter to roll!" << endl;
-	// 		getch();
-	// 		dice1 = rand() % 6 + 1;
-	// 		dice2 = rand() % 6 + 1;
-	// 		currentPlayer->move(dice1 + dice2);
-	// 		Draw(board, line);
-	// 		cout << "Dice 1: " << dice1 << endl;
-	// 		cout << "Dice 2: " << dice2 << endl;
-	// 		cout << currentPlayer->getName() << "'s Money: $" << currentPlayer->getMoney() << endl;
-	// 		cout << currentPlayer->getName() << "'s Owned Tiles: ";
-	// 		for (int i = 0; i < 40; i++)
-	// 		{
-	// 			if (board.getTile(i)->getOwnerName() == currentPlayer->getName())
-	// 				cout << board.getTile(i)->getName() << "   ";
-	// 		}
-	// 		cout << endl;
-	// 		if(originalLocation > currentPlayer->getLocationNum())
-	// 		{
-	// 			currentPlayer->setMoney(currentPlayer->getMoney() + 200);
-	// 			cout << "Congratulations! You went all the way around and received $200! You now have $" << currentPlayer->getMoney() << "." << endl;
-	// 		}
-	// 		currentPosition = board.getTile(currentPlayer->getLocationNum());
-	// 		getch();
-	// 		switch(currentPosition->getType())
-	// 		{
-	// 			case GO:
-	// 				cout << "You landed on the Go tile!" << endl; 
-	// 				break;
-	// 			case JAIL:
-	// 				cout << "Just passing through at the Jail tile!" << endl;
-	// 				break;
-	// 			case GOTOJAIL:
-	// 				cout << "Oh no! You landed on the Go to Jail tile! Press enter to go to jail!" << endl;
-	// 				currentPlayer->goToJail();
-	// 				getch();
-	// 				Draw(board, line);
-	// 				break;
-	// 			case HOUSE: //Change it to where if you can't pay rent then you either sell a property to the owner or go bankrupt(game over)
-	// 				cout << "You landed on " << currentPosition->getName() << "." << endl;
-	// 				if (currentPosition->getOwner() == NULL)
-	// 				{
-	// 					cout << "No one currently owns this tile. Would you like to buy/mortgage it? The cost to buy is $" << currentPosition->getCostToBuy() << " and the cost to mortgage is $" << currentPosition->getMortgage() <<". If yes, please state which one(b/m) or no(n) to continue. ";
-	// 					while (!madeDecision)
-	// 					{
-	// 						cin >> answer;
-	// 						switch (answer)
-	// 						{
-	// 							case 'b':
-	// 								if(currentPlayer->getMoney() >= currentPosition->getCostToBuy())
-	// 								{
-	// 									currentPosition->setOwner(currentPlayer);
-	// 									currentPlayer->setMoney(currentPlayer->getMoney() - currentPosition->getCostToBuy());
-	// 									cout << "Congratulations! You are the new owner of " << currentPosition->getName() << "!" << endl;
-	// 									madeDecision = true;
-	// 								}
-	// 								else 
-	// 									cout << "Do not have enough money to buy " << currentPosition->getName() << ". Please select another option.";
-	// 								break;
-	// 							case 'm':
-	// 								if(currentPlayer->getMoney() >= currentPosition->getMortgage())
-	// 								{
-	// 									currentPosition->setOwner(currentPlayer);
-	// 									currentPlayer->setMoney(currentPlayer->getMoney() - currentPosition->getMortgage());
-	// 									currentPosition->mortgage();
-	// 									cout << "Congratulations! You have mortgaged " << currentPosition->getName() << "!" << endl;
-	// 									madeDecision = true;
-	// 								}
-	// 								else 
-	// 									cout << "Do not have enough money to mortgage " << currentPosition->getName() << ". Please select another option.";
-	// 								break;
-	// 							case 'n':
-	// 								madeDecision = true;
-	// 								break;
-	// 						}
-	// 					}
-	// 				madeDecision = false;
-	// 				} else if(currentPosition->getOwner() != currentPlayer && !currentPosition->isMortgaged())
-	// 				{
-	// 					if(currentPlayer->getMoney() >= currentPosition->getRent())
-	// 					{
-	// 					currentPlayer->setMoney(currentPlayer->getMoney() - currentPosition->getRent());
-	// 					cout << "You had to pay rent of $" << currentPosition->getRent() << "! You now have $" << currentPlayer->getMoney() << "." << endl;
-	// 					}
-	// 					else
-	// 					{
-	// 						cout << "Oh no! You do not have the money to pay rent for " << currentPosition->getName() << ". Are you willing to give up a certain property? If so, please enter the property name. If not, please enter 'n'.";
-	// 						while (!madeDecision)
-	// 						{
-	// 							cin >> answerString;
-	// 							if (answerString == "n")
-	// 							{
-	// 								currentPlayer->goToJail();
-	// 								currentPosition->getOwner()->setMoney(currentPosition->getOwner()->getMoney() + currentPlayer->getMoney());
-	// 								currentPlayer->setDebt(currentPosition->getRent() - currentPlayer->getMoney());
-	// 								currentPlayer->setMoney(0);
-	// 								currentPlayer->setInDebtTo(currentPosition->getOwner());
-	// 								cout << "You didn't have enough money to pay rent so you have to go to jail! You now have a debt of $" << currentPlayer->getDebt() << " to "<< currentPlayer->getInDebtTo() << "! Press enter to go to jail!"<< endl;
-	// 								getch();
-	// 								Draw(board, line);
-	// 							}
-	// 							else
-	// 							{
-	// 								for (int i = 0; i < 40; i++)
-	// 								{
-	// 									if(board.getTile(i)->getName() == answerString && board.getTile(i)->getOwnerName() == currentPlayer->getName())
-	// 									{
-	// 										board.getTile(i)->setOwner(currentPosition->getOwner());
-	// 										cout << board.getTile(i)->getName() << " now belongs to " << board.getTile(i)->getOwnerName() << "." << endl;
-	// 									}
-	// 								}		
-	// 							}
-	// 						}	
-	// 					}
-	// 				} else 
-	// 					cout << "This tile is mortgaged so you do not have to pay any rent. " << endl;
-	// 			case CHEST:
-	// 				cout << "You landed on the Community Chest! Press enter to draw!" << endl;
-	// 				getch();
-	// 				drawCommunityChest();
-	// 			case FREE:
-	// 				cout << "You landed on free parking!" << endl;
-	// 				break;
-	// 			case RAILROAD:
-	// 				cout << "You landed on " << currentPosition->getName() << "!" << endl;
-	// 				if(currentPosition->getOwner() == NULL)
-	// 				{
-						
-	// 				}
-	// 			case CHANCE:
-	// 				cout << "You landed on a Chance tile! Press enter to draw a chance card!" << endl;
-	// 				getch();
-	// 				drawChanceCard();
-	// 				cout << "Press enter to continue!" << endl;
-	// 				getch();
-	// 				Draw(board, line);
-	// 				break;
-	// 			case TAX:
-	// 			case LUXURYTAX:
-	// 			case UTILITY:
-	// 		}
+		line.addPlayer(name[i], i + 1);
+	
+	Monopoly game(&board, &line);
+	
+	Player *p = line.frontLine();
+	
+	// while(!game.gameOver()) {
+	// 	game.drawBoard();
+	// 	for(int i = 0; i < line.getNumPlayers(); i++) {
+	// 		cout << p->getLocationNum() << " " << p->getName() << endl;
+	// 		p->move(1);
+	// 		line.nextTurn();
+	// 		p = line.frontLine();		
 	// 	}
-	// }	
+	// 	getchar();
 		
+	// }
+
+
+	while(!game.gameOver())
+	{
+		game.drawBoard();
+
+		currentPlayer = game.getCurrentPlayer();
+		originalLocation = currentPlayer->getLocationNum();
+
+		game.print(currentPlayer->getName() + "'s turn! Press any key to roll!");
+		
+		if(currentPlayer->inJail()) {
+			game.attemptOutOfJail();
+			if(currentPlayer->inJail()) {
+				line.nextTurn();
+				continue;
+			}
+			currentPlayer->move(game.getRoll());
+		}
+		else {
+			currentPlayer->move(game.roll());
+			// currentPlayer->move(1);
+		}
+
+		currentTile = game.getCurrentTile();
+
+    	game.print("You rolled a " + to_string(game.getDie(1)) + " and a " + to_string(game.getDie(2)) + "!", true, false);
+		game.print("Landed on " + currentTile->getName() + "!");
+
+		if(currentPlayer->getLocationNum() < originalLocation) {
+			game.print("Since you passed GO you received $200!", true, false);
+			currentPlayer->addMoney(200);
+		}
+		
+		switch(currentTile->getType())
+		{
+			case GO: 
+				break;
+			case JAIL:
+				cout << "Just passing through!" << endl;
+				break;
+			case GOTOJAIL:
+				cout << "You're going to jail!" << endl;
+				// currentPlayer->goToJail();
+				break;
+			case HOUSE: //Change it to where if you can't pay rent then you either sell a property to the owner or go bankrupt(game over)
+				// game.landOnHouseTile();
+				break;
+			case CHEST:
+				break;
+			case FREE:
+				break;
+			case RAILROAD:
+				break;
+			case CHANCE:
+				break;
+			case TAX:
+				game.print("You have to pay $75!", true, false);
+				break;
+			case LUXURYTAX:
+				game.landOnLuxuryTaxTile();
+				break;
+			case UTILITY:
+				break;
+		}
+		if(game.rollDoubles() && !initiallyInJail) {
+			game.print("Since you rolled doubles you get to go again!");
+			continue;
+		}
+
+		line.nextTurn();
+	}	
+
+	// 	originalLocation = currentPlayer->getLocationNum();
+	// 	cout << currentPlayer->getName() << "'s Turn. Press enter to roll!" << endl;
+	// 	getch();
+	// 	dice1 = rand() % 6 + 1;
+	// 	dice2 = rand() % 6 + 1;
+	// 	currentPlayer->move(dice1 + dice2);
+	// 	Draw(board, line);
+	// 	cout << "Dice 1: " << dice1 << endl;
+	// 	cout << "Dice 2: " << dice2 << endl;
+	// 	cout << currentPlayer->getName() << "'s Money: $" << currentPlayer->getMoney() << endl;
+	// 	cout << currentPlayer->getName() << "'s Owned Tiles: ";
+	// 	for (int i = 0; i < 40; i++)
+	// 	{
+	// 		if (board.getTile(i)->getOwnerName() == currentPlayer->getName())
+	// 			cout << board.getTile(i)->getName() << "   ";
+	// 	}
+	// 	cout << endl;
+	// 	if(originalLocation > currentPlayer->getLocationNum())
+	// 	{
+	// 		currentPlayer->setMoney(currentPlayer->getMoney() + 200);
+	// 		cout << "Congratulations! You went all the way around and received $200! You now have $" << currentPlayer->getMoney() << "." << endl;
+	// 	}
+	// 	currentPosition = board.getTile(currentPlayer->getLocationNum());
+	// 	getch();
+				
 	
 	return 0;
 }

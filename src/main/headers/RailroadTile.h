@@ -18,13 +18,5 @@ class RailroadTile : public BoardTile
 		Player *getOwner() const;
 		void setOwner(Player *o);
 		int getCostToBuy() const;
-		int getCostOfHouses() const;
-		int getNumHouses() const;
-		int getRent() const;
-		void buyHouse();
-		Colors getColorType() const;
-		int getRent(int roll) const;
-		int getMortgage() const;
-		bool isMortgaged() const;
-		void mortgage();
+		int getRent(int roll=0) const;
 };

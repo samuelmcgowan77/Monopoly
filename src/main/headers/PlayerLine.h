@@ -23,9 +23,14 @@ class PlayerLine
 		queue<Player*> players;
 	public:
 		PlayerLine();
-		~PlayerLine();
-		int getNumPlayers();
-		void addPlayer(string s, int n, BoardTile *b);
+		// ~PlayerLine();
+		int getNumPlayers() const;
+		void addPlayer(string s, int num, int loc=0);
+		void addPlayer(Player *p);
 		void nextTurn();
-		Player *frontLine();
+		void pop();
+		Player *frontLine() const;
+		Player *findPlayer(int v);
+		// void clone(PlayerLine *rhs);
+		PlayerLine &operator=(PlayerLine *rhs);
 };

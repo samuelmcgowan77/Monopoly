@@ -51,7 +51,7 @@ int HouseTile::getNumHouses() const
 	return numHouses;
 }
 
-int HouseTile::getRent() const 
+int HouseTile::getRent(int roll) const 
 {
 	if (owner == NULL)
 		return 0;
@@ -62,7 +62,7 @@ void HouseTile::buyHouse()
 {
 	if(owner->getMoney() >= getCostOfHouses())
 	{
-		owner->setMoney(owner->getMoney() - getCostOfHouses());
+		owner->loseMoney(getCostOfHouses());
 		numHouses++;
 	}
 }
@@ -82,8 +82,12 @@ bool HouseTile::isMortgaged() const
 }
 void HouseTile::mortgage()
 {
-	mortgaged = !mortgaged;
+	mortgaged = true;
 	numHouses = 0;
+}
+
+void HouseTile::unmortgage() {
+	mortgaged = false;
 }
 
 /* HouseTile *HouseTile::operator=(BoardTile *b)

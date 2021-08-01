@@ -26,14 +26,6 @@ class BoardTile
 		virtual string getOwnerName() const;
 		virtual Player *getOwner() const;
 		virtual void setOwner(Player *o);
-		virtual int getCostToBuy() const=0;
-		virtual int getCostOfHouses() const=0;
-		virtual int getNumHouses() const=0;
-		virtual int getRent() const=0;
-		virtual void buyHouse();
-		virtual Colors getColorType() const;
-		virtual int getRent(int roll) const=0;
-		virtual int getMortgage() const;
-		virtual bool isMortgaged() const;
-		virtual void mortgage();
+		virtual int getCostToBuy() const;
+		virtual int getRent(int roll=0) const;
 };
