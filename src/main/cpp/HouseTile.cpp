@@ -21,44 +21,52 @@ HouseTile::HouseTile(string s, Colors c, int buy, int houseCost, int base, int o
 	rent[5] = hotel;
 }
 
-string HouseTile::getOwnerName() const
+string 
+HouseTile::getOwnerName() const
 {
 	return owner->getName();
 }
 
-Player *HouseTile::getOwner() const
+shared_ptr<Player>
+HouseTile::getOwner() const
 {
 	return owner;
 }
 
-void HouseTile::setOwner(Player *o)
+void
+HouseTile::setOwner(shared_ptr<Player> o)
 {
 	owner = o;
 }
 
-int HouseTile::getCostToBuy() const 
+int 
+HouseTile::getCostToBuy() const 
 {
 	return costToBuy;
 }
 
-int HouseTile::getCostOfHouses() const 
+int 
+HouseTile::getCostOfHouses() const 
 { 
 	return costOfHouses;
 }
 
-int HouseTile::getNumHouses() const 
+int 
+HouseTile::getNumHouses() const 
 {
 	return numHouses;
 }
 
-int HouseTile::getRent(int roll) const 
+int 
+HouseTile::getRent(int roll) const 
 {
 	if (owner == NULL)
 		return 0;
 	return rent[numHouses];
 }
 
-void HouseTile::buyHouse()
+void 
+HouseTile::buyHouse()
 {
 	if(owner->getMoney() >= getCostOfHouses())
 	{
@@ -67,26 +75,33 @@ void HouseTile::buyHouse()
 	}
 }
 
-Colors HouseTile::getColorType() const 
+Colors 
+HouseTile::getColorType() const 
 {
 	return colorType;
 }
 
-int HouseTile::getMortgage() const
+int 
+HouseTile::getMortgage() const
 {
 	return costOfMortgage;
 }
-bool HouseTile::isMortgaged() const
+
+bool 
+HouseTile::isMortgaged() const
 {
 	return mortgaged;
 }
-void HouseTile::mortgage()
+
+void 
+HouseTile::mortgage()
 {
 	mortgaged = true;
 	numHouses = 0;
 }
 
-void HouseTile::unmortgage() {
+void 
+HouseTile::unmortgage() {
 	mortgaged = false;
 }
 

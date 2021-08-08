@@ -1,4 +1,5 @@
 //#include<iostream>
+#include<memory>
 #include<string>
 #include<queue>
 #include "Monopoly.h"
@@ -223,8 +224,8 @@ int main()
 	int numPlayers, dice1, dice2;
 	char answer;
 	string answerString;
-	PlayerLine line;
-	Player *currentPlayer;
+	shared_ptr<PlayerLine> line(new PlayerLine());
+	shared_ptr<Player> currentPlayer;
 	BoardTile *currentTile;
 	int originalLocation;
 	int numOfDoubles = 0;
@@ -334,11 +335,11 @@ int main()
 	}
 	
 	for(int i = 0; i < numPlayers; i++)
-		line.addPlayer(name[i], i + 1);
-		
-	Monopoly game(&board, &line);
+		line->addPlayer(name[i], i + 1);
 	
-	Player *p = line.frontLine();
+	Monopoly game(&board, line);
+	
+	shared_ptr<Player> p(line->frontLine());
 	
 	// while(!game.gameOver()) {
 	// 	game.drawBoard();
@@ -370,7 +371,7 @@ int main()
 			game.print(currentPlayer->getName() + "'s turn!");
 			game.attemptOutOfJail();
 			if(currentPlayer->inJail()) {
-				line.nextTurn();
+				line->nextTurn();
 				continue;
 			}
 			currentPlayer->move(game.getRoll());
@@ -388,8 +389,6 @@ int main()
 		
 		switch(currentTile->getType())
 		{
-			case GO: 
-				break;
 			case JAIL:
 				cout << "Just passing through!" << endl;
 				break;
@@ -400,20 +399,18 @@ int main()
 			case HOUSE: //Change it to where if you can't pay rent then you either sell a property to the owner or go bankrupt(game over)
 				game.landOnHouseTile();
 				break;
-			case CHEST:
-				break;
-			case FREE:
-				break;
-			case RAILROAD:
-				break;
-			case CHANCE:
-				break;
 			case TAX:
 				game.print("You have to pay $75!", true, false);
 				break;
 			case LUXURYTAX:
 				game.landOnLuxuryTaxTile();
 				break;
+			//All other cases do nothing
+			case GO: 
+			case CHEST:
+			case FREE:
+			case RAILROAD:
+			case CHANCE:
 			case UTILITY:
 				break;
 		}
@@ -422,7 +419,7 @@ int main()
 			continue;
 		}
 
-		line.nextTurn();
+		line->nextTurn();
 	}	
 
 	// 	originalLocation = currentPlayer->getLocationNum();

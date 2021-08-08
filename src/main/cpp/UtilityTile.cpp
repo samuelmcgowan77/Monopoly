@@ -10,31 +10,39 @@ UtilityTile::UtilityTile(string s, int buy, Tiletypes e)
 	tileType = e;
 }
 
-string UtilityTile::getOwnerName() const
+string 
+UtilityTile::getOwnerName() const
 {
 	return owner->getName();
 }
 
-Player *UtilityTile::getOwner() const
+shared_ptr<Player> 
+UtilityTile::getOwner() const
 {
 	return owner;
 }
 
-void UtilityTile::setOwner(Player *o)
+void 
+UtilityTile::setOwner(shared_ptr<Player> o)
 {
 	owner = o;
 }
 
-int UtilityTile::getCostToBuy() const 
+int 
+UtilityTile::getCostToBuy() const 
 {
 	return costToBuy;
 }
 
-int UtilityTile::getRent(int roll) const 
+int 
+UtilityTile::getRent(int roll) const 
 {
-	if(owner == NULL)
+	//If there isn't an owner
+	if(!owner) {
 		return 0;
-	if(owner->getNumUtilities() == 2)
+	}
+	else if(owner->getNumUtilities() == 2) {
 		return roll * 10;
+	}
 	return roll * 4;
 }

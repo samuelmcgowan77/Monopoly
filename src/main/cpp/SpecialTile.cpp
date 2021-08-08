@@ -38,7 +38,7 @@ SpecialTile::SpecialTile(Tiletypes e)
 SpecialTile::~SpecialTile() {};
 
 string SpecialTile::getOwnerName() const {return "";};
-Player *SpecialTile::getOwner() const {return NULL;}
+shared_ptr<Player> SpecialTile::getOwner() const {return NULL;}
 int SpecialTile::getCostToBuy() const {return -1;}
-void SpecialTile::setOwner(Player *o) {}
+void SpecialTile::setOwner(shared_ptr<Player> o) {}
 int SpecialTile::getRent(int roll) const {return -1;}

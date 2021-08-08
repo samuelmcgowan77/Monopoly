@@ -1,5 +1,6 @@
 #include<queue>
 #include<string>
+#include<memory>
 
 #ifndef PLAYER_H
 #define PLAYER_H
@@ -20,17 +21,17 @@
 class PlayerLine
 {
 	private:
-		queue<Player*> players;
+		queue<shared_ptr<Player>> players;
 	public:
 		PlayerLine();
 		// ~PlayerLine();
 		int getNumPlayers() const;
 		void addPlayer(string s, int num, int loc=0);
-		void addPlayer(Player *p);
+		void addPlayer(shared_ptr<Player> p);
 		void nextTurn();
 		void pop();
-		Player *frontLine() const;
-		Player *findPlayer(int v);
+		shared_ptr<Player> frontLine() const;
+		shared_ptr<Player> findPlayer(int v);
 		// void clone(PlayerLine *rhs);
-		PlayerLine &operator=(PlayerLine rhs);
+		PlayerLine &operator=(shared_ptr<PlayerLine> rhs);
 };

@@ -14,29 +14,36 @@ RailroadTile::RailroadTile(string s, int buy, Tiletypes e)
 	rent[3] = 200;
 }
 
-string RailroadTile::getOwnerName() const
+string 
+RailroadTile::getOwnerName() const
 {
 	return owner->getName();
 }
 
-Player *RailroadTile::getOwner() const
+shared_ptr<Player>
+RailroadTile::getOwner() const
 {
 	return owner;
 }
 
-void RailroadTile::setOwner(Player *o)
+void 
+RailroadTile::setOwner(shared_ptr<Player> o)
 {
 	owner = o;
 }
 
-int RailroadTile::getCostToBuy() const 
+int 
+RailroadTile::getCostToBuy() const 
 {
 	return costToBuy;
 }
 
-int RailroadTile::getRent(int roll) const 
+int 
+RailroadTile::getRent(int roll) const 
 {
-	if (owner == NULL)
+	if (!owner) {
 		return 0;
+	}
+
 	return rent[owner->getNumRailroads() - 1];
 } 

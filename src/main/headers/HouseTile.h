@@ -1,4 +1,5 @@
 #include <string>
+#include <memory>
 #ifndef BOARD_H
 #define BOARD_H
 
@@ -15,7 +16,7 @@ class HouseTile : public BoardTile
 	private:
 		int costToBuy;
 		int costOfMortgage;
-		Player *owner;
+		shared_ptr<Player> owner;
 		int rent[6];
 		int costOfHouses;
 		int numHouses;
@@ -25,8 +26,8 @@ class HouseTile : public BoardTile
 	public:
 		HouseTile(string s, Colors c, int buy, int houseCost, int base, int oneH, int twoH, int threeH, int fourH, int hotel, int mortgageCost, Tiletypes e=HOUSE);
 		string getOwnerName() const;
-		Player *getOwner() const;
-		void setOwner(Player *o);
+		shared_ptr<Player> getOwner() const;
+		void setOwner(shared_ptr<Player>);
 		int getCostToBuy() const;
 		int getCostOfHouses() const;
 		int getNumHouses() const;
