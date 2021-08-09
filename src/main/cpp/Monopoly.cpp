@@ -43,8 +43,7 @@ void Monopoly::attemptOutOfJail() {
     Player *player = getCurrentPlayer();
     int turnsInJail = player->getTurnsInJail();
 
-    cout << "You have been in jail for " << turnsInJail << " turns." << endl;
-    getchar();
+	print("You have been in jail for " + to_string(turnsInJail) + " turns.", true, false);
     if(turnsInJail < 3) {
         if(player->getMoney() >= 50) {
             
@@ -52,13 +51,13 @@ void Monopoly::attemptOutOfJail() {
             bool answered = false;
 
             while (answered) {
-                cout << "Would you like to get out of jail for $50? (y/n)" << endl;
+				print("Would you like to get out of jail for $50? (y/n)", false, false);
                 cin >> ans;
+				getchar();
 
                 if(ans == "y") {
                     player->loseMoney(50);
-                    cout << "You now have $" << player->getMoney() << "." << endl;
-                    getchar();
+					print("You now have $" + to_string(player->getMoney()) + ".", true, false);
                     player->getOutOfJail();
                     roll();
                     answered = true;
@@ -68,7 +67,7 @@ void Monopoly::attemptOutOfJail() {
                     answered = true;
                 }
                 else {
-                    cout << "Please enter a valid answer." << endl;
+					print("Please enter a valid answer.", false, true);
                 }
             }
         }
@@ -81,26 +80,23 @@ void Monopoly::attemptOutOfJail() {
 void Monopoly::rollDiceInJail(Player *p) {
     int r = roll();
     if(rollDoubles()) {
-        cout << "You got doubles!" << endl;
-        getchar();
+		print("You got doubles!", true, false);
         p->getOutOfJail();
     }
     else {
         if(p->getTurnsInJail() >= 3) {
             if(!p->ableToPay(50)) {
-                cout << "You could not pay the $50 bail! GAME OVER FOR YOU!" << endl;
-                getchar();
+				print("You could not pay the $50 bail! GAME OVER FOR YOU!");
                 p->exitGame();
+				return;
             }
             else {;
                 p->loseMoney(50);
-                cout << "Had to pay $50 bail. Now have $" << p->getMoney() << "." << endl;
-                getchar();
+				print("Had to pay $50 bail. Now have $" + to_string(p->getMoney()) + ".", true, false);
             }
         }
         else {
-            cout << "Still in jail. Turn has ended." << endl;
-            getchar();
+			print("Still in jail. Turn has ended.");
         }
     }
 }
@@ -124,17 +120,17 @@ void Monopoly::landOnHouseTile() {
 
     if(houseTile->getOwner() == nullptr) {
         if(houseTile->getCostToBuy() > player->getMoney()) {
-            cout << "You do not have enough funds to buy this house." << endl;
-            getchar();
+			print("You do not have enough funds to buy this house.", true, false);
             return;
         }
         while(!answered) {
-            cout << "Would you like to buy the house? The cost is (y/n)" << endl;
+			print("Would you like to buy the house? The cost is (y/n)", false, false);
             cin >> ans;
+			getchar();
             if(ans == "y") {
                 player->loseMoney(houseTile->getCostToBuy());
                 houseTile->setOwner(player);
-                cout << "Congratulations! You bought " << houseTile->getName() << "!" << endl;
+				print("Congratulations! You bought " + houseTile->getName() + "!");
                 answered = true;
             }
             else if(ans == "n") {
@@ -142,14 +138,13 @@ void Monopoly::landOnHouseTile() {
                 answered = true;
             }
             else {
-                cout << "Please enter a valid answer." << endl;
+				print("Please enter a valid answer.", false, true);
             }
         }
     } else if(!houseTile->isMortgaged()) {
         player->loseMoney(houseTile->getRent());
         owner->addMoney(houseTile->getRent());
-        cout << "Had to pay rent to " << owner->getName() << endl;
-        /* WORK ON THIS NEXT */
+		print("Had to pay rent to " + owner->getName(), true, false);
     }
 }
 
@@ -166,34 +161,31 @@ void Monopoly::auctionHouse(HouseTile *house) {
         bid[i] = 0;
     }
     
-    while(copyLine.getNumPlayers() > 0) {
-		cout << "Number of bidders remaining: " << copyLine.getNumPlayers() << endl;		
+    while(copyLine.getNumPlayers() > 0) {		
+		print("Number of bidders remaining: " + copyLine.getNumPlayers(), false, false);
 
         if(bid[highestPlayer - 1] > 0) {
 			winningPlayer = copyLine.findPlayer(highestPlayer);
-            cout << "Highest Bid: " << bid[highestPlayer - 1] << " from " << winningPlayer->getName() << "!" << endl;
+			print("Highest Bid: " + to_string(bid[highestPlayer - 1]) + " from " + winningPlayer->getName() + "!", false, false);
         }
 
-        cout << player->getName() << ", what would you like to bid? Enter -1 to not bid anymore. ";
+		print( player->getName() + ", what would you like to bid? Enter -1 to not bid anymore.", false, false);
         cin >> givingBid;
+		getchar();
         if(givingBid > player->getMoney()) {
-            cout << "Bid is higher than what you currently have. Please bid lower." << endl;
+			print("Bid is higher than what you currently have. Please bid lower.", true, false);
         }
         else if(givingBid < 0) {
             copyLine.pop();
 			continue;
         }
-		else if(givingBid < bid[highestPlayer - 1]) {
-			cout << "Bid is lower than higest bid. Please bid higher." << endl;
+		else if(givingBid <= bid[highestPlayer - 1]) {
+			print("Bid is less than or equal to higest bid. Please bid higher.", true, false);
 			continue;
 		}
         else { 
-			cout << player->getPlayerNum() << endl;
             bid[player->getPlayerNum() - 1] = givingBid;
-
-            if (bid[player->getPlayerNum() - 1] > bid[highestPlayer - 1]) {
-                highestPlayer = player->getPlayerNum();
-            }
+            highestPlayer = player->getPlayerNum();
         }
         copyLine.nextTurn();
         player = copyLine.frontLine();
@@ -205,11 +197,10 @@ void Monopoly::auctionHouse(HouseTile *house) {
         player->loseMoney(house->getCostToBuy());
         house->setOwner(player);
 
-        cout << "Congratulations! " << player->getName() << " is now the owner of " << house->getName() << "!" << endl;
+		print("Congratulations! " + player->getName() + " is now the owner of " + house->getName() + "!");
     }
     else {
-        cout << "No one bought " << house->getName() << "." << endl;
-        getchar();
+		print("No one bought " + house->getName() + ".");
     }
 }
 
@@ -219,6 +210,10 @@ void Monopoly::landOnLuxuryTaxTile() {
 	if(tithe < 200) {
 		print("Have to pay 10% of what you have.", true, false);
 		currentPlayer->loseMoney((int)tithe);
+	}
+	else {
+		print("Have to pay $200.", true, false);
+		currentPlayer->loseMoney(200);
 	}
 }
 
@@ -235,7 +230,7 @@ void Monopoly::print(string s, bool wait, bool reset) {
 
 void Monopoly::drawBoard() {
     PlayerLine copyLine;
-    copyLine = line;
+    copyLine = *line;
 
     //x and y places of each player and 'where' represents the top(1), middle(2), and bottom(3) parts of the board
 	int px[copyLine.getNumPlayers()], py[copyLine.getNumPlayers()], pNum[copyLine.getNumPlayers()], where[copyLine.getNumPlayers()]; //x is j and y is i in the for loops down below

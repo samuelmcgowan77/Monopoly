@@ -7,6 +7,13 @@ PlayerLine::PlayerLine()
 	
 }
 
+// PlayerLine::~PlayerLine() {
+// 	for(int i = 0; i < getNumPlayers(); i++) {
+// 		delete frontLine();
+// 		players.pop();
+// 	}
+// }
+
 int PlayerLine::getNumPlayers() const 
 {
 	return players.size();
@@ -72,12 +79,12 @@ Player *PlayerLine::findPlayer(int v) {
 // 	}
 // }
 
-PlayerLine &PlayerLine::operator=(PlayerLine *rhs) {
-	Player *player = rhs->frontLine();
-	for (int i = 0; i < rhs->getNumPlayers(); i++) {
-	    this->addPlayer(player->getName(),player->getPlayerNum(), player->getLocationNum());
-		rhs->nextTurn();
-		player = rhs->frontLine();
+PlayerLine &PlayerLine::operator=(PlayerLine rhs) {
+	Player player = *rhs.frontLine();
+	for (int i = 0; i < rhs.getNumPlayers(); i++) {
+	    this->addPlayer(player.getName(),player.getPlayerNum(), player.getLocationNum());
+		rhs.nextTurn();
+		player = *rhs.frontLine();
 	}
 
 	return *this;

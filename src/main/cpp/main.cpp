@@ -9,7 +9,7 @@ void landOnHouseTile(Player *p, Board* b)
 	bool madeDecision = false;
 	int costToSell;
 	BoardTile *currentPosition = b->getTile(p->getLocationNum());
-	cout << "You landed on " << currentPosition->getName() << "." << endl;
+	 << "You landed on " << currentPosition->getName() << "." << endl;
 		if (currentPosition->getOwner() == NULL)
 		{
 			cout << "No one currently owns this tile. Would you like to buy it? The cost to buy is $" << currentPosition->getCostToBuy() << ". Say buy(b) or no(n) to continue. ";
@@ -335,7 +335,7 @@ int main()
 	
 	for(int i = 0; i < numPlayers; i++)
 		line.addPlayer(name[i], i + 1);
-	
+		
 	Monopoly game(&board, &line);
 	
 	Player *p = line.frontLine();
@@ -359,20 +359,21 @@ int main()
 
 		currentPlayer = game.getCurrentPlayer();
 		originalLocation = currentPlayer->getLocationNum();
-
-		game.print(currentPlayer->getName() + "'s turn! Press any key to roll!");
+		initiallyInJail = currentPlayer->inJail();
 		
-		if(currentPlayer->inJail()) {
+		if(!currentPlayer->inJail()) {
+			game.print(currentPlayer->getName() + "'s turn! Press any key to roll!");
+			currentPlayer->move(game.roll());
+			// currentPlayer->move(1);	
+		}
+		else {
+			game.print(currentPlayer->getName() + "'s turn!");
 			game.attemptOutOfJail();
 			if(currentPlayer->inJail()) {
 				line.nextTurn();
 				continue;
 			}
 			currentPlayer->move(game.getRoll());
-		}
-		else {
-			currentPlayer->move(game.roll());
-			// currentPlayer->move(1);
 		}
 
 		currentTile = game.getCurrentTile();
@@ -397,7 +398,7 @@ int main()
 				// currentPlayer->goToJail();
 				break;
 			case HOUSE: //Change it to where if you can't pay rent then you either sell a property to the owner or go bankrupt(game over)
-				// game.landOnHouseTile();
+				game.landOnHouseTile();
 				break;
 			case CHEST:
 				break;
@@ -431,7 +432,7 @@ int main()
 	// 	dice2 = rand() % 6 + 1;
 	// 	currentPlayer->move(dice1 + dice2);
 	// 	Draw(board, line);
-	// 	cout << "Dice 1: " << dice1 << endl;
+	// 	 << "Dice 1: " << dice1 << endl;
 	// 	cout << "Dice 2: " << dice2 << endl;
 	// 	cout << currentPlayer->getName() << "'s Money: $" << currentPlayer->getMoney() << endl;
 	// 	cout << currentPlayer->getName() << "'s Owned Tiles: ";

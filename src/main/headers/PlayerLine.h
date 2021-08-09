@@ -32,5 +32,5 @@ class PlayerLine
 		Player *frontLine() const;
 		Player *findPlayer(int v);
 		// void clone(PlayerLine *rhs);
-		PlayerLine &operator=(PlayerLine *rhs);
+		PlayerLine &operator=(PlayerLine rhs);
 };
