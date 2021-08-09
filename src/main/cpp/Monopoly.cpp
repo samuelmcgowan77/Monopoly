@@ -90,15 +90,15 @@ void Monopoly::rollDiceInJail(shared_ptr<Player> player) {
         player->getOutOfJail();
     }
     else {
-        if(p->getTurnsInJail() >= 3) {
+        if(player->getTurnsInJail() >= 3) {
             if(!player->ableToPay(50)) {
 				print("You could not pay the $50 bail! GAME OVER FOR YOU!");
-                p->exitGame();
+                player->exitGame();
 				return;
             }
             else {;
                 player->loseMoney(50);
-				print("Had to pay $50 bail. Now have $" + to_string(p->getMoney()) + ".", true, false);
+				print("Had to pay $50 bail. Now have $" + to_string(player->getMoney()) + ".", true, false);
             }
         }
         else {
