@@ -389,6 +389,8 @@ int main()
 		
 		switch(currentTile->getType())
 		{
+			case GO: 
+				break;
 			case JAIL:
 				cout << "Just passing through!" << endl;
 				break;
@@ -399,18 +401,20 @@ int main()
 			case HOUSE: //Change it to where if you can't pay rent then you either sell a property to the owner or go bankrupt(game over)
 				game.landOnHouseTile();
 				break;
+			case CHEST:
+				break;
+			case FREE:
+				break;
+			case RAILROAD:
+				break;
+			case CHANCE:
+				break;
 			case TAX:
 				game.print("You have to pay $75!", true, false);
 				break;
 			case LUXURYTAX:
 				game.landOnLuxuryTaxTile();
 				break;
-			//All other cases do nothing
-			case GO: 
-			case CHEST:
-			case FREE:
-			case RAILROAD:
-			case CHANCE:
 			case UTILITY:
 				break;
 		}

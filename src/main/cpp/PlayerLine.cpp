@@ -35,7 +35,7 @@ PlayerLine::addPlayer(shared_ptr<Player> p) {
 void 
 PlayerLine::nextTurn()
 {
-	shared_ptr<Player> p = players.front();
+	shared_ptr<Player> p(players.front());
 	players.pop();
 	players.push(p);
 }
