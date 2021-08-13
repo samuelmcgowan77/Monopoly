@@ -14,41 +14,47 @@ PlayerLine::PlayerLine()
 // 	}
 // }
 
-int PlayerLine::getNumPlayers() const 
+int 
+PlayerLine::getNumPlayers() const
 {
 	return players.size();
 }
 
-void PlayerLine::addPlayer(string s, int num, int loc)
+void 
+PlayerLine::addPlayer(string s, int num, int loc)
 {
-	Player *p;
-	p = new Player(s,num,loc);
+	shared_ptr<Player> p(new Player(s,num,loc));
 	players.push(p);
 }
 
-void PlayerLine::addPlayer(Player *p) {
+void 
+PlayerLine::addPlayer(shared_ptr<Player> p) {
 	players.push(p);
 }
 
-void PlayerLine::nextTurn()
+void 
+PlayerLine::nextTurn()
 {
-	Player *p = players.front();
+	shared_ptr<Player> p(players.front());
 	players.pop();
 	players.push(p);
 }
 
-void PlayerLine::pop() {
+void 
+PlayerLine::pop() {
 	players.pop();
 }
 
-Player *PlayerLine::frontLine() const 
+shared_ptr<Player> 
+PlayerLine::frontLine() const 
 {
 	return players.front();
 }
 
-Player *PlayerLine::findPlayer(int v) {
+shared_ptr<Player> 
+PlayerLine::findPlayer(int v) {
 	PlayerLine copyLine = *this;
-	Player *player = copyLine.frontLine();
+	shared_ptr<Player> player = copyLine.frontLine();
 
 	for(int i = 0; i < copyLine.getNumPlayers(); i++) {
 		if(player->getPlayerNum() == v) {
@@ -79,12 +85,12 @@ Player *PlayerLine::findPlayer(int v) {
 // 	}
 // }
 
-PlayerLine &PlayerLine::operator=(PlayerLine rhs) {
-	Player player = *rhs.frontLine();
-	for (int i = 0; i < rhs.getNumPlayers(); i++) {
-	    this->addPlayer(player.getName(),player.getPlayerNum(), player.getLocationNum());
-		rhs.nextTurn();
-		player = *rhs.frontLine();
+PlayerLine &PlayerLine::operator=(shared_ptr<PlayerLine> rhs) {
+	shared_ptr<Player> player(rhs->frontLine());
+	for (int i = 0; i < rhs->getNumPlayers(); i++) {
+	    this->addPlayer(player->getName(),player->getPlayerNum(), player->getLocationNum());
+		rhs->nextTurn();
+		player = rhs->frontLine();
 	}
 
 	return *this;

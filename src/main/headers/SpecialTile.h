@@ -13,8 +13,8 @@ class SpecialTile : public BoardTile
 		SpecialTile(Tiletypes e);
 		~SpecialTile();
 		string getOwnerName() const;
-		Player *getOwner() const;
-		void setOwner(Player *o);
+		shared_ptr<Player> getOwner() const;
+		void setOwner(shared_ptr<Player>);
 		int getCostToBuy() const;
 		int getCostOfHouses() const;
 		int getNumHouses() const;

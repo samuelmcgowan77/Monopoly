@@ -1,4 +1,5 @@
 //#include<iostream>
+#include<memory>
 #include<string>
 #include<queue>
 #include "Monopoly.h"
@@ -223,8 +224,8 @@ int main()
 	int numPlayers, dice1, dice2;
 	char answer;
 	string answerString;
-	PlayerLine line;
-	Player *currentPlayer;
+	shared_ptr<PlayerLine> line(new PlayerLine());
+	shared_ptr<Player> currentPlayer;
 	BoardTile *currentTile;
 	int originalLocation;
 	int numOfDoubles = 0;
@@ -334,11 +335,11 @@ int main()
 	}
 	
 	for(int i = 0; i < numPlayers; i++)
-		line.addPlayer(name[i], i + 1);
-		
-	Monopoly game(&board, &line);
+		line->addPlayer(name[i], i + 1);
 	
-	Player *p = line.frontLine();
+	Monopoly game(&board, line);
+	
+	shared_ptr<Player> p(line->frontLine());
 	
 	// while(!game.gameOver()) {
 	// 	game.drawBoard();
@@ -370,7 +371,7 @@ int main()
 			game.print(currentPlayer->getName() + "'s turn!");
 			game.attemptOutOfJail();
 			if(currentPlayer->inJail()) {
-				line.nextTurn();
+				line->nextTurn();
 				continue;
 			}
 			currentPlayer->move(game.getRoll());
@@ -422,7 +423,7 @@ int main()
 			continue;
 		}
 
-		line.nextTurn();
+		line->nextTurn();
 	}	
 
 	// 	originalLocation = currentPlayer->getLocationNum();

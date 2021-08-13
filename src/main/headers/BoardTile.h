@@ -1,4 +1,5 @@
 #include<string>
+#include<memory>
 
 #ifndef PLAYER_H
 #define PLAYER_H
@@ -24,8 +25,8 @@ class BoardTile
 		Tiletypes getType();
 		string getName();
 		virtual string getOwnerName() const;
-		virtual Player *getOwner() const;
-		virtual void setOwner(Player *o);
+		virtual shared_ptr<Player> getOwner() const;
+		virtual void setOwner(shared_ptr<Player> o);
 		virtual int getCostToBuy() const;
 		virtual int getRent(int roll=0) const;
 };

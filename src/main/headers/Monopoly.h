@@ -6,15 +6,16 @@
 #include "UtilityTile.h"
 #include<iostream>
 #include<cstdlib>
+#include<memory>
 
 class Monopoly {
     private: 
         int dice1;
         int dice2;
-        Board *board;
-        PlayerLine *line;
+        Board* board;
+        shared_ptr<PlayerLine> line;
     public:
-        Monopoly(Board *b, PlayerLine *l);
+        Monopoly(Board* b, shared_ptr<PlayerLine> l);
         void drawBoard();
         void drawCommunityChest();
         void drawChanceCard();
@@ -23,13 +24,13 @@ class Monopoly {
         int getRoll();
         int getDie(int v);
         void attemptOutOfJail();
-        void rollDiceInJail(Player *p);
+        void rollDiceInJail(shared_ptr<Player> player);
         Player *getNextPlayer();
         bool gameOver();
         void landOnHouseTile();
         void auctionHouse(HouseTile *house);
         void landOnLuxuryTaxTile();
-        Player *getCurrentPlayer();
+        shared_ptr<Player> getCurrentPlayer();
         BoardTile *getCurrentTile();
         void print(string s, bool wait=true, bool reset=true);
 };

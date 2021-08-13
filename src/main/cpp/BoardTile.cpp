@@ -14,7 +14,7 @@ string BoardTile::getName()
 
 BoardTile::~BoardTile() {};
 string BoardTile::getOwnerName() const {return "";};
-Player *BoardTile::getOwner() const {return NULL;}
+shared_ptr<Player> BoardTile::getOwner() const {return NULL;}
 int BoardTile::getCostToBuy() const {return -1;}
-void BoardTile::setOwner(Player *o) {}
+void BoardTile::setOwner(shared_ptr<Player> o) {}
 int BoardTile::getRent(int roll) const {return -1;}
