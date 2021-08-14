@@ -1,11 +1,9 @@
-#include <string>
+#ifndef HOUSETILE_H
+#define HOUSETILE_H
+
 #include <memory>
-#ifndef BOARD_H
-#define BOARD_H
-
+#include <string>
 #include "BoardTile.h"
-
-#endif
 
 using namespace std;
 
@@ -39,3 +37,5 @@ class HouseTile : public BoardTile
 		void mortgage();
 		void unmortgage();
 };
+
+#endif

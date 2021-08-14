@@ -1,9 +1,7 @@
-#ifndef BOARD_H
-#define BOARD_H
+#ifndef RAILROADTILE_H
+#define RAILROADTILE_H
 
 #include "BoardTile.h"
-
-#endif
 
 //---------- RailroadTile Class ----------
 class RailroadTile : public BoardTile
@@ -20,3 +18,5 @@ class RailroadTile : public BoardTile
 		int getCostToBuy() const;
 		int getRent(int roll=0) const;
 };
+
+#endif
