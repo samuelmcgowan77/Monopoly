@@ -1,20 +1,12 @@
+#ifndef PLAYERLINE_H
+#define PLAYERLINE_H
+
 #include<queue>
 #include<string>
 #include<memory>
-
-#ifndef PLAYER_H
-#define PLAYER_H
-
 #include "Player.h"
-
-#endif
-
-#ifndef BOARD_H
-#define BOARD_H
-
 #include "BoardTile.h"
 
-#endif
 
 //---------- PlayerLine Class ----------
 
@@ -35,3 +27,5 @@ class PlayerLine
 		// void clone(PlayerLine *rhs);
 		PlayerLine &operator=(shared_ptr<PlayerLine> rhs);
 };
+
+#endif

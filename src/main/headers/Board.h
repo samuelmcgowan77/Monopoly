@@ -3,8 +3,6 @@
 
 #include "BoardTile.h"
 
-#endif
-
 // ---------- Board Class ----------
 
 class Board
@@ -17,3 +15,5 @@ class Board
 		void addTile(BoardTile *t);
 		BoardTile *getTile(int t);
 };
+
+#endif

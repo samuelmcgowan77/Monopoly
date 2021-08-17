@@ -1,9 +1,7 @@
-#ifndef BOARD_H
-#define BOARD_H
+#ifndef SPECIALTILE_H
+#define SPECIALTILE_H
 
 #include "BoardTile.h"
-
-#endif
 
 //---------- SpecialTile Class Interface ----------
 
@@ -26,3 +24,5 @@ class SpecialTile : public BoardTile
 		bool isMortgaged() const;
 		void mortgage();	
 };
+
+#endif

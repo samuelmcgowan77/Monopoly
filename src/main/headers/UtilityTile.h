@@ -1,9 +1,8 @@
-#ifndef BOARD_H
-#define BOARD_H
+#ifndef UTILITYTILE_H
+#define UTILITYTILE_H
 
 #include "BoardTile.h"
 
-#endif
 
 //---------- UtilityTile Class Interface ----------
 
@@ -20,3 +19,4 @@ class UtilityTile : public BoardTile
 		int getCostToBuy() const;
 		int getRent(int roll=0) const;
 };
+#endif

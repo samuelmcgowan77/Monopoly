@@ -1,12 +1,9 @@
+#ifndef BOARDTILE_H
+#define BOARDTILE_H
+
 #include<string>
 #include<memory>
-
-#ifndef PLAYER_H
-#define PLAYER_H
-
 #include "Player.h"
-
-#endif
 
 using namespace std;
 
@@ -30,3 +27,4 @@ class BoardTile
 		virtual int getCostToBuy() const;
 		virtual int getRent(int roll=0) const;
 };
+#endif
