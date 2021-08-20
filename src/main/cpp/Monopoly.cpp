@@ -344,8 +344,8 @@ void Monopoly::drawChanceCard() {
 			sendPlayerToJail(player);
 			break;
 		case 8:
-			/* WORK ON THIS NEXT */
 			print("Make general repairs on all your property--for each house pay $25--for each hotel $100.", true, false);
+			payHouseRepairs(player);
 			break;
 		case 9:
 			print("Pay poor tax of $15.", true, false);
