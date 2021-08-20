@@ -118,43 +118,67 @@ Monopoly::getCurrentTile() {
     return board->getTile(loc);
 }
 
+void
+Monopoly::landOnRailroadOrUtility() {
+	BoardTile *propertyTile = getCurrentTile();
+    shared_ptr<Player> owner(propertyTile->getOwner());
+    shared_ptr<Player> player(getCurrentPlayer());
+
+    if(!owner) {
+        askToBuyProperty(player, propertyTile);
+    } else {
+        player->loseMoney(propertyTile->getRent());
+        owner->addMoney(propertyTile->getRent());
+		print("Had to pay rent to " + owner->getName(), true, false);
+    }
+}
+
 void 
 Monopoly::landOnHouseTile() {
-    string ans;
-    bool answered = false;
-
     HouseTile *houseTile = (HouseTile *)getCurrentTile();
     shared_ptr<Player> owner(houseTile->getOwner());
     shared_ptr<Player> player(getCurrentPlayer());
 
-    if(!houseTile->getOwner()) {
-        if(houseTile->getCostToBuy() > player->getMoney()) {
-			print("You do not have enough funds to buy this house.", true, false);
+    if(!owner) {
+        askToBuyProperty(player, houseTile);
+    } else if(!houseTile->isMortgaged()) {
+        player->loseMoney(houseTile->getRent());
+        owner->addMoney(houseTile->getRent());
+		print("Had to pay rent to " + owner->getName(), true, false);
+    } else {
+		print("Since the house is currently mortgaged, you don't have to pay rent!", true, false);
+	}
+}
+
+void 
+Monopoly::askToBuyProperty(shared_ptr<Player> player, BoardTile* propertyTile) {
+	if(propertyTile->getCostToBuy() > player->getMoney()) {
+			print("You do not have enough funds to buy.", true, false);
             return;
         }
-        while(!answered) {
-			print("Would you like to buy the house? The cost is (y/n)", false, false);
+
+	bool answered = false;
+	string ans;
+	while(!answered) {
+			print("Would you like to buy this property? The cost is $" + to_string(propertyTile->getCostToBuy()) + ". (y/n)", false, false);
             cin >> ans;
 			getchar();
             if(ans == "y") {
-                player->loseMoney(houseTile->getCostToBuy());
-                houseTile->setOwner(player);
-				print("Congratulations! You bought " + houseTile->getName() + "!");
+                player->loseMoney(propertyTile->getCostToBuy());
+                propertyTile->setOwner(player);
+				print("Congratulations! You bought " + propertyTile->getName() + "!");
                 answered = true;
             }
             else if(ans == "n") {
-                auctionHouse(houseTile);
+				if(propertyTile->getType() == HOUSE) {
+					auctionHouse((HouseTile *) propertyTile);
+				}
                 answered = true;
             }
             else {
 				print("Please enter a valid answer.", false, true);
             }
         }
-    } else if(!houseTile->isMortgaged()) {
-        player->loseMoney(houseTile->getRent());
-        owner->addMoney(houseTile->getRent());
-		print("Had to pay rent to " + owner->getName(), true, false);
-    }
 }
 
 void 
@@ -239,6 +263,218 @@ Monopoly::print(string s, bool wait, bool reset) {
 	}
 	
 }
+
+void Monopoly::drawChanceCard() {
+	int cardNum = rand() % 16;
+	shared_ptr<Player> player = getCurrentPlayer();
+	shared_ptr<Player> owner;
+	int originalSpot = player->getLocationNum();
+	BoardTile *newSpot;
+	char answer;
+	bool madeDecision = false;
+	print("Your card is: ", false, false);
+	switch(cardNum)
+	{
+		case 0:
+			print("Advance to Go (Collect $200).",true, false);
+			movePlayerToSpot(0);
+			break;
+		case 1:
+			print("Advance to Illinois Ave--If you pass Go, collect $200.", true, false);
+			movePlayerToSpot(24);
+			landOnHouseTile();
+			break;
+		case 2:
+			// Locations for utilities are 12 and 28
+			print("Advance token to nearest Utility. If unowned you may buy if from the Bank. If owned, throw dice and pay owner a total ten times the amount thrown.",true, false);
+			movePlayerToSpot(originalSpot <= 12 || originalSpot > 28 ? 12 : 28);
+			newSpot = board->getTile(player->getLocationNum());
+			owner = newSpot->getOwner();
+			print("You moved to " + newSpot->getName() + "!");			
+			if(!owner) {
+				askToBuyProperty(player, newSpot);
+			}
+			else {
+				roll();
+				print("You rolled a " + to_string(getDie(1)) + " and a " + to_string(getDie(2)) + "!");
+				payRentTo(player, owner, newSpot, getRoll());
+			}
+			break;
+		case 3:
+			// Locations for railroads are 5, 15, 25, and 35
+			print("Advance token to the nearest Railroad and pay owner twice the rental to which he/she is otherwise entitled. If Railroad is unowned, you may buy it from the Bank.", true, false);
+			// player->goToSpot(player->getLocationNum() <= 15 ? abs())
+			switch (originalSpot) 
+			{
+				case 0 ... 4: case 35 ... 39:
+					movePlayerToSpot(5);
+					break;
+				case 5 ... 14:
+					movePlayerToSpot(15);
+					break;
+				case 15 ... 24:
+					movePlayerToSpot(25);
+					break;
+				case 25 ... 34:
+					movePlayerToSpot(35);
+					break;
+			}
+			newSpot = board->getTile(player->getLocationNum());
+			owner = newSpot->getOwner();
+			print("You moved to " + newSpot->getName() + "!");			
+			if(!owner) {
+				askToBuyProperty(player, newSpot);
+			}
+			else {
+				payRentTo(player, owner, newSpot, 2);
+			}
+			break;
+		case 4:
+			print("Bank pays you dividend of $50.", true, false);
+			player->addMoney(50);
+			break;
+		case 5:
+			print("Get out of Jail Free.", true, false);
+			player->setOutOfJailCard(true);
+			break;
+		case 6:
+			print("Go back 3 spaces.", true, false);
+			movePlayerToSpot((originalSpot + 37) % 40);
+			break;
+		case 7:
+			print("Go to Jail--go directly to jail--do not pass Go, do not collect $200.", true, false);
+			sendPlayerToJail(player);
+			break;
+		case 8:
+			/* WORK ON THIS NEXT */
+			print("Make general repairs on all your property--for each house pay $25--for each hotel $100.", true, false);
+			break;
+		case 9:
+			print("Pay poor tax of $15.", true, false);
+			player->loseMoney(15);
+			break;
+		case 10:
+			print("Take a trip to Reading Railroad--if you pass Go, collect $200.", true, false);
+			movePlayerToSpot(5);
+			landOnRailroadOrUtility();
+			break;
+		case 11:
+			print("Take a walk on the Boardwalk--advance token to Boardwalk.", true, false);
+			movePlayerToSpot(39);
+			landOnHouseTile();
+			break;
+		case 12:
+			print("You have been elected Chairman of the Board. Pay each player $50.", true, false);
+			payEachPlayer(50);
+			break;
+		case 13:
+			print("Your building and loan matures--collect $150.", true, false);
+			player->addMoney(150);
+			break;
+		case 14:
+			print("You have won a crossword competition--collect $100.", true, false);
+			player->addMoney(100);
+			break;
+		case 15:
+			print("Advance to St. Charles Place--if you pass Go, collect $200.", true, false);
+			movePlayerToSpot(11);
+			landOnHouseTile();
+			break;
+	}
+}
+
+void
+Monopoly::sendPlayerToJail(shared_ptr<Player> player) {
+	if (player->hasOutOfJailCard()) {
+		print("You have a 'Get Out of Jail' card! You skipped this time!");
+		player->setOutOfJailCard(false);
+		return;
+	}
+	player->goToJail();
+}
+
+void
+Monopoly::moveCurrentPlayer(int roll) {
+	shared_ptr<Player> player = getCurrentPlayer();
+	int origionalSpot = player->getLocationNum();
+	player->move(roll);
+
+	if(player->getLocationNum() < origionalSpot) {
+		print("You recieved $200!");
+		player->addMoney(200);
+	}
+}
+
+void
+Monopoly::movePlayerToSpot(int val, bool getBonus) {
+	shared_ptr<Player> player = getCurrentPlayer();
+	int origionalSpot = player->getLocationNum();
+	player->goToSpot(val);
+
+	if(player->getLocationNum() < origionalSpot && getBonus) {
+		print("You recieved $200!");
+		player->addMoney(200);
+	}
+}
+
+void
+Monopoly::payEachPlayer(int val) {
+	shared_ptr<Player> currentPlayer = getCurrentPlayer();
+	line->nextTurn();
+	for(int i = 0; i < line->getNumPlayers() - 1; i++) {
+		getCurrentPlayer()->addMoney(50);
+		line->nextTurn();
+	}
+	currentPlayer->loseMoney((line->getNumPlayers() - 1) * 50);
+
+}
+
+void
+Monopoly::payHouseRepairs(shared_ptr<Player> player) {
+	list<HouseTile *> ownedHouses = getOwnedHouses(player);
+	HouseTile * currentHouse;
+	int total = 0;
+	int numHouses;
+
+	// list<HouseTile *>::iterator it;
+	// for(it = ownedHouses.begin(); it != ownedHouses.end(); it++) {
+	for (HouseTile *tile:ownedHouses) {
+		numHouses = tile->getNumHouses();
+		if (numHouses <= 4) {
+			total += numHouses * 25;
+		}
+		else {
+			total += 100;
+		}
+	}
+
+	player->loseMoney(total);
+	print("You had to pay $" + to_string(total) + ".");
+}
+
+list<HouseTile *> 
+Monopoly::getOwnedHouses(shared_ptr<Player> player) {
+	list<HouseTile *> ownedHouses;
+	BoardTile * tile;
+	shared_ptr<Player> owner;
+	int playerNum = player->getPlayerNum();
+	for(int i = 0; i < 40; i++) {
+		tile = board->getTile(i);
+		owner = tile->getOwner();
+		if(owner && tile->getType() == HOUSE && owner->getPlayerNum() == playerNum) {
+			ownedHouses.push_back((HouseTile *) tile);
+		}
+	}
+
+	return ownedHouses;
+}
+
+void
+Monopoly::payRentTo(shared_ptr<Player> player, shared_ptr<Player> owner, BoardTile* newSpot, int multiply) {
+	print("You have to pay $" + to_string(newSpot->getRent() * multiply) + " rent to " + owner->getName() + ".");
+	player->loseMoney(newSpot->getRent() * multiply);
+	owner->addMoney(newSpot->getRent() * multiply);
+} 
 
 void 
 Monopoly::drawBoard() {

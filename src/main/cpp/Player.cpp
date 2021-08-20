@@ -27,9 +27,18 @@ int Player::getLocationNum()
 	return locationNum;
 }
 
+void Player::setLocationNum(int val) {
+	locationNum = val;
+}
+
 void Player::move(int roll)
 {
 	locationNum = (locationNum + roll) % 40;
+}
+
+//TODO: Use this function to check and see if the player passed go or not. 
+void Player::goToSpot(int val) {
+	locationNum = val;
 }
 
 void Player::goToJail()

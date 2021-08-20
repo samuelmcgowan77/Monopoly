@@ -27,6 +27,7 @@ class Player
 		int getLocationNum();
 		void setLocationNum(int r);
 		void move(int roll);
+		void goToSpot(int val);
 		void goToJail();
 		int getTurnsInJail();
 		void setTurnsInJail(int v);
