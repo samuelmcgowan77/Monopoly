@@ -94,7 +94,6 @@ void Monopoly::rollDiceInJail(shared_ptr<Player> player) {
             if(!player->ableToPay(50)) {
 				print("You could not pay the $50 bail! GAME OVER FOR YOU!");
                 player->exitGame();
-				return;
             }
             else {;
                 player->loseMoney(50);
@@ -144,7 +143,7 @@ Monopoly::landOnHouseTile() {
     } else if(!houseTile->isMortgaged()) {
         player->loseMoney(houseTile->getRent());
         owner->addMoney(houseTile->getRent());
-		print("Had to pay rent to " + owner->getName(), true, false);
+		print("Had to pay $" + to_string(houseTile->getRent()) + " rent to " + owner->getName(), true, false);
     } else {
 		print("Since the house is currently mortgaged, you don't have to pay rent!", true, false);
 	}
@@ -200,7 +199,7 @@ Monopoly::auctionHouse(HouseTile *house) {
 
         if(bid[highestPlayer - 1] > 0) {
 			winningPlayer = copyLine.findPlayer(highestPlayer);
-			print("Highest Bid: " + to_string(bid[highestPlayer - 1]) + " from " + winningPlayer->getName() + "!", false, false);
+			print("Highest Bid: $" + to_string(bid[highestPlayer - 1]) + " from " + winningPlayer->getName() + "!", false, false);
         }
 
 		print( player->getName() + ", what would you like to bid? Enter -1 to not bid anymore.", false, false);
@@ -211,6 +210,7 @@ Monopoly::auctionHouse(HouseTile *house) {
         }
         else if(givingBid < 0) {
             copyLine.pop();
+			player = copyLine.frontLine();
 			continue;
         }
 		else if(givingBid <= bid[highestPlayer - 1]) {
@@ -228,7 +228,7 @@ Monopoly::auctionHouse(HouseTile *house) {
 
     if(bid[highestPlayer - 1] > 0) {
         player = line->findPlayer(highestPlayer);
-        player->loseMoney(house->getCostToBuy());
+        player->loseMoney(bid[highestPlayer - 1]);
         house->setOwner(player);
 
 		print("Congratulations! " + player->getName() + " is now the owner of " + house->getName() + "!");
@@ -270,8 +270,6 @@ void Monopoly::drawChanceCard() {
 	shared_ptr<Player> owner;
 	int originalSpot = player->getLocationNum();
 	BoardTile *newSpot;
-	char answer;
-	bool madeDecision = false;
 	print("Your card is: ", false, false);
 	switch(cardNum)
 	{
@@ -476,13 +474,37 @@ Monopoly::payRentTo(shared_ptr<Player> player, shared_ptr<Player> owner, BoardTi
 	owner->addMoney(newSpot->getRent() * multiply);
 } 
 
+shared_ptr<Player>
+Monopoly::getPlayerById(int id) {
+	PlayerLine copyLine = *line;
+	shared_ptr<Player> player;
+	for (int i = 0; i < copyLine.getNumPlayers(); i++) {
+		player = copyLine.frontLine();
+		if (player->getPlayerNum() == id) return player;
+		copyLine.nextTurn();
+	}
+}
+
+void 
+Monopoly::endLine(int playerId) {
+	if(playerId > 0 && playerId <= line->getNumPlayers()) {
+		shared_ptr<Player> player = getPlayerById(playerId);
+		if (player->getPlayerNum() == getCurrentPlayer()->getPlayerNum()) {
+			cout << "*";
+		}
+		cout << player->getName() << ": $" << player->getMoney(); 
+	}
+	cout << endl;
+}
+
 void 
 Monopoly::drawBoard() {
     PlayerLine copyLine;
     copyLine = *line;
+	int numPlayers = copyLine.getNumPlayers();
 
     //x and y places of each player and 'where' represents the top(1), middle(2), and bottom(3) parts of the board
-	int px[copyLine.getNumPlayers()], py[copyLine.getNumPlayers()], pNum[copyLine.getNumPlayers()], where[copyLine.getNumPlayers()]; //x is j and y is i in the for loops down below
+	int px[numPlayers], py[numPlayers], pNum[numPlayers], where[numPlayers]; //x is j and y is i in the for loops down below
 	shared_ptr<Player> player(copyLine.frontLine());
 	
 	system("clear");
@@ -494,7 +516,7 @@ Monopoly::drawBoard() {
 		player = copyLine.frontLine();
 	}
 		
-	for(int i = 0; i < copyLine.getNumPlayers(); i++)
+	for(int i = 0; i < numPlayers; i++)
 	{
 		player = copyLine.frontLine();
 		pNum[i] = player->getPlayerNum();
@@ -718,7 +740,7 @@ Monopoly::drawBoard() {
 	{
 		for (int j = 0; j < 122; j++)
 		{
-			for (int k = 0; k < copyLine.getNumPlayers(); k++)
+			for (int k = 0; k < numPlayers; k++)
 			{
 				if (j == px[k] && i == py[k] && where[k] == 1)
 				{
@@ -816,17 +838,18 @@ Monopoly::drawBoard() {
 			else 
 				cout << " ";
 		}
-		cout << endl;
+		endLine(i + 1);
 	}
 	for (int i = 0; i < 122; i++)
 		cout << "-";
 	cout << endl;
+
 	//The sides of the board
 	for (int i = 0; i < 35; i++)
 	{
 		for (int j = 0; j < 122; j++)
 		{
-			for (int k = 0; k < copyLine.getNumPlayers(); k++)
+			for (int k = 0; k < numPlayers; k++)
 			{
 				if (j == px[k] && i == py[k] && where[k] == 2)
 				{
@@ -976,17 +999,18 @@ Monopoly::drawBoard() {
 			else 
 				cout << " ";
 		}
-			cout << endl;
+		endLine(i + 4);
 	}
 	//The bottom of the board
 	for (int i = 0; i < 122; i++)
 		cout << "-";
 	cout << endl;
+
 	for (int i = 0; i < 3; i++)
 	{
 		for (int j = 0; j < 122; j++)
 		{
-			for (int k = 0; k < copyLine.getNumPlayers(); k++)
+			for (int k = 0; k < numPlayers; k++)
 			{
 				if (j == px[k] && i == py[k] && where[k] == 3)
 				{

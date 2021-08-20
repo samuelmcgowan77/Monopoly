@@ -29,7 +29,7 @@ class Monopoly {
         void sendPlayerToJail(shared_ptr<Player> player);
         void moveCurrentPlayer(int roll);
         void movePlayerToSpot(int val, bool getBonus=true);
-        Player *getNextPlayer();
+        // Player *getNextPlayer();
         bool gameOver();
         void landOnHouseTile();
         void landOnRailroadOrUtility();
@@ -37,10 +37,15 @@ class Monopoly {
         void auctionHouse(HouseTile *house);
         void landOnLuxuryTaxTile();
         shared_ptr<Player> getCurrentPlayer();
+        shared_ptr<Player> getPlayerById(int id);
         BoardTile *getCurrentTile();
         void payEachPlayer(int val);
         void payHouseRepairs(shared_ptr<Player> player);
         list<HouseTile *> getOwnedHouses(shared_ptr<Player> player);
+        list<BoardTile *> getOwnedProperties(shared_ptr<Player> player);
         void payRentTo(shared_ptr<Player> player, shared_ptr<Player> owner, BoardTile* newSpot, int multiply=1);
+        void playerLoseMoney(int val);
+        void askToSellProperty();
+        void endLine(int PlayerId);
         void print(string s, bool wait=true, bool reset=true);
 };

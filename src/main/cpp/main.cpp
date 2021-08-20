@@ -151,7 +151,7 @@ int main()
 		
 		if(!currentPlayer->inJail()) {
 			game.print(currentPlayer->getName() + "'s turn! Press any key to roll!");
-			currentPlayer->move(game.roll());
+			game.moveCurrentPlayer(game.roll());
 			// currentPlayer->move(1);	
 		}
 		else {
@@ -161,18 +161,13 @@ int main()
 				line->nextTurn();
 				continue;
 			}
-			currentPlayer->move(game.getRoll());
+			game.moveCurrentPlayer(game.getRoll());
 		}
 
 		currentTile = game.getCurrentTile();
 
     	game.print("You rolled a " + to_string(game.getDie(1)) + " and a " + to_string(game.getDie(2)) + "!", true, false);
 		game.print("Landed on " + currentTile->getName() + "!");
-
-		if(currentPlayer->getLocationNum() < originalLocation) {
-			game.print("Since you passed GO you received $200!", true, false);
-			currentPlayer->addMoney(200);
-		}
 		
 		switch(currentTile->getType())
 		{
@@ -183,7 +178,7 @@ int main()
 				break;
 			case GOTOJAIL:
 				cout << "You're going to jail!" << endl;
-				// currentPlayer->goToJail();
+				currentPlayer->goToJail();
 				break;
 			case HOUSE: //Change it to where if you can't pay rent then you either sell a property to the owner or go bankrupt(game over)
 				game.landOnHouseTile();
@@ -195,6 +190,7 @@ int main()
 			case RAILROAD:
 				break;
 			case CHANCE:
+				game.drawChanceCard();
 				break;
 			case TAX:
 				game.print("You have to pay $75!", true, false);
