@@ -283,7 +283,7 @@ void Monopoly::drawChanceCard() {
 	int originalSpot = player->getLocationNum();
 	BoardTile *newSpot;
 	print("Your card is: ", false, false);
-	switch(3)
+	switch(cardNum)
 	{
 		case 0:
 			print("Advance to Go (Collect $200).",true, false);
