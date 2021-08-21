@@ -8,17 +8,12 @@ using namespace std;
 
 int main()
 {
-	int numPlayers, dice1, dice2;
-	char answer;
-	string answerString;
+	int numPlayers;
 	shared_ptr<PlayerLine> line(new PlayerLine());
 	shared_ptr<Player> currentPlayer;
 	BoardTile *currentTile;
 	int originalLocation;
-	int numOfDoubles = 0;
-	bool madeDecision = false;
 	bool initiallyInJail = false;
-	HouseTile *sellingTile;
 	
 	//Create all of the board tiles
 	//These are in the order of the actual board
@@ -126,8 +121,8 @@ int main()
 	
 	Monopoly game(&board, line);
 	
-	shared_ptr<Player> p(line->frontLine());
-	
+	// shared_ptr<Player> p(line->frontLine());
+	// 
 	// while(!game.gameOver()) {
 	// 	game.drawBoard();
 	// 	for(int i = 0; i < line.getNumPlayers(); i++) {
@@ -153,6 +148,15 @@ int main()
 			game.print(currentPlayer->getName() + "'s turn! Press any key to roll!");
 			game.moveCurrentPlayer(game.roll());
 			// currentPlayer->move(1);	
+			if (game.rollDoubles()) {
+				currentPlayer->incNumDoubles();
+				if (currentPlayer->getNumDoubles() >= 3) {
+					game.print("This is your third double in a row! You're going to jail");
+					game.sendPlayerToJail(currentPlayer);
+					line->nextTurn();
+					continue;
+				}
+			}
 		}
 		else {
 			game.print(currentPlayer->getName() + "'s turn!");
@@ -166,7 +170,6 @@ int main()
 
 		currentTile = game.getCurrentTile();
 
-    	game.print("You rolled a " + to_string(game.getDie(1)) + " and a " + to_string(game.getDie(2)) + "!", true, false);
 		game.print("Landed on " + currentTile->getName() + "!");
 		
 		switch(currentTile->getType())

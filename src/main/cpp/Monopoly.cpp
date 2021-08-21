@@ -24,6 +24,8 @@ int
 Monopoly::roll() {
     dice1 = rand() % 6 + 1;
 	dice2 = rand() % 6 + 1;
+
+	print("You rolled a " + to_string(dice1) + " and a " + to_string(dice2) + "!", true, false);
     
     return dice1 + dice2;
 }
@@ -84,6 +86,8 @@ Monopoly::attemptOutOfJail() {
 }
 
 void Monopoly::rollDiceInJail(shared_ptr<Player> player) {
+	print("You have to roll the dice in jail! Press any key to roll!", true, false);
+
     int r = roll();
     if(rollDoubles()) {
 		print("You got doubles!", true, false);

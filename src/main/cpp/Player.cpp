@@ -9,6 +9,7 @@ Player::Player(string s, int p, int loc)
 	money = 1500;
 	numRailroads = 0;
 	turnsInJail = -1;
+	numDoubles = 0;
 	locationNum = loc;
 	outOfJailCard = false;
 	numUtilities = 0;
@@ -45,6 +46,18 @@ void Player::goToJail()
 {
 	locationNum = 10;
 	turnsInJail = 0;
+}
+
+int Player::getNumDoubles() {
+	return numDoubles;
+}
+
+void Player::incNumDoubles() {
+	numDoubles++;
+}
+
+void Player::resetNumDoubles() {
+	numDoubles = 0;
 }
 
 void Player::goToStart()
