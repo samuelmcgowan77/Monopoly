@@ -32,7 +32,8 @@ class Monopoly {
         // Player *getNextPlayer();
         bool gameOver();
         void landOnHouseTile();
-        void landOnRailroadOrUtility();
+        void landOnRailroadTile(int multiply=1);
+        void landOnUtilityTile();
         void askToBuyProperty(shared_ptr<Player> player, BoardTile* propertyTile);
         void auctionHouse(HouseTile *house);
         void landOnLuxuryTaxTile();
@@ -43,7 +44,7 @@ class Monopoly {
         void payHouseRepairs(shared_ptr<Player> player);
         list<HouseTile *> getOwnedHouses(shared_ptr<Player> player);
         list<BoardTile *> getOwnedProperties(shared_ptr<Player> player);
-        void payRentTo(shared_ptr<Player> player, shared_ptr<Player> owner, BoardTile* newSpot, int multiply=1);
+        void payRentTo(shared_ptr<Player> player, shared_ptr<Player> owner, BoardTile* newSpot, int multiply=1, int roll=0);
         void playerLoseMoney(int val);
         void askToSellProperty();
         void endLine(int PlayerId);

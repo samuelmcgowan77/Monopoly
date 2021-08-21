@@ -174,7 +174,7 @@ int main()
 			case GO: 
 				break;
 			case JAIL:
-				cout << "Just passing through!" << endl;
+				game.print("Just passing through!");
 				break;
 			case GOTOJAIL:
 				cout << "You're going to jail!" << endl;
@@ -188,17 +188,20 @@ int main()
 			case FREE:
 				break;
 			case RAILROAD:
+				game.landOnRailroadTile();
 				break;
 			case CHANCE:
 				game.drawChanceCard();
 				break;
 			case TAX:
 				game.print("You have to pay $75!", true, false);
+				currentPlayer->loseMoney(75);
 				break;
 			case LUXURYTAX:
 				game.landOnLuxuryTaxTile();
 				break;
 			case UTILITY:
+				game.landOnUtilityTile();
 				break;
 		}
 		if(game.rollDoubles() && !initiallyInJail) {

@@ -117,18 +117,30 @@ Monopoly::getCurrentTile() {
     return board->getTile(loc);
 }
 
+/* Separate this out to two different functions, one for each tile */
 void
-Monopoly::landOnRailroadOrUtility() {
-	BoardTile *propertyTile = getCurrentTile();
-    shared_ptr<Player> owner(propertyTile->getOwner());
+Monopoly::landOnRailroadTile(int multiply) {
+	RailroadTile *railroadTile = (RailroadTile *) getCurrentTile();
+    shared_ptr<Player> owner(railroadTile->getOwner());
     shared_ptr<Player> player(getCurrentPlayer());
 
     if(!owner) {
-        askToBuyProperty(player, propertyTile);
+        askToBuyProperty(player, railroadTile);
     } else {
-        player->loseMoney(propertyTile->getRent());
-        owner->addMoney(propertyTile->getRent());
-		print("Had to pay rent to " + owner->getName(), true, false);
+		payRentTo(player, owner, railroadTile, multiply);
+    }
+}
+
+void
+Monopoly::landOnUtilityTile() {
+	UtilityTile *utilityTile = (UtilityTile *) getCurrentTile();
+	shared_ptr<Player> owner(utilityTile->getOwner());
+    shared_ptr<Player> player(getCurrentPlayer());
+
+	if(!owner) {
+        askToBuyProperty(player, utilityTile);
+    } else {
+		payRentTo(player, owner, utilityTile, 1, getRoll());
     }
 }
 
@@ -271,7 +283,7 @@ void Monopoly::drawChanceCard() {
 	int originalSpot = player->getLocationNum();
 	BoardTile *newSpot;
 	print("Your card is: ", false, false);
-	switch(cardNum)
+	switch(3)
 	{
 		case 0:
 			print("Advance to Go (Collect $200).",true, false);
@@ -288,14 +300,16 @@ void Monopoly::drawChanceCard() {
 			movePlayerToSpot(originalSpot <= 12 || originalSpot > 28 ? 12 : 28);
 			newSpot = board->getTile(player->getLocationNum());
 			owner = newSpot->getOwner();
-			print("You moved to " + newSpot->getName() + "!");			
-			if(!owner) {
-				askToBuyProperty(player, newSpot);
+			print("You moved to " + newSpot->getName() + "!");
+			if (owner) {
+				roll();
+				print("You rolled a " + to_string(getDie(1)) + " and a " + to_string(getDie(2)) + "!", false, false);	
+				print("Had to pay $" + to_string(getRoll() * 10) + " to " + owner->getName() + ".", true, false);
+				player->loseMoney(getRoll() * 10);
+				owner->addMoney(getRoll() * 10);
 			}
 			else {
-				roll();
-				print("You rolled a " + to_string(getDie(1)) + " and a " + to_string(getDie(2)) + "!");
-				payRentTo(player, owner, newSpot, getRoll());
+				askToBuyProperty(player, newSpot);
 			}
 			break;
 		case 3:
@@ -318,14 +332,8 @@ void Monopoly::drawChanceCard() {
 					break;
 			}
 			newSpot = board->getTile(player->getLocationNum());
-			owner = newSpot->getOwner();
 			print("You moved to " + newSpot->getName() + "!");			
-			if(!owner) {
-				askToBuyProperty(player, newSpot);
-			}
-			else {
-				payRentTo(player, owner, newSpot, 2);
-			}
+			landOnRailroadTile(2);
 			break;
 		case 4:
 			print("Bank pays you dividend of $50.", true, false);
@@ -337,7 +345,7 @@ void Monopoly::drawChanceCard() {
 			break;
 		case 6:
 			print("Go back 3 spaces.", true, false);
-			movePlayerToSpot((originalSpot + 37) % 40);
+			movePlayerToSpot((originalSpot + 37) % 40, false);
 			break;
 		case 7:
 			print("Go to Jail--go directly to jail--do not pass Go, do not collect $200.", true, false);
@@ -354,7 +362,7 @@ void Monopoly::drawChanceCard() {
 		case 10:
 			print("Take a trip to Reading Railroad--if you pass Go, collect $200.", true, false);
 			movePlayerToSpot(5);
-			landOnRailroadOrUtility();
+			landOnRailroadTile();
 			break;
 		case 11:
 			print("Take a walk on the Boardwalk--advance token to Boardwalk.", true, false);
@@ -468,10 +476,10 @@ Monopoly::getOwnedHouses(shared_ptr<Player> player) {
 }
 
 void
-Monopoly::payRentTo(shared_ptr<Player> player, shared_ptr<Player> owner, BoardTile* newSpot, int multiply) {
+Monopoly::payRentTo(shared_ptr<Player> player, shared_ptr<Player> owner, BoardTile* newSpot, int multiply, int roll) {
 	print("You have to pay $" + to_string(newSpot->getRent() * multiply) + " rent to " + owner->getName() + ".");
-	player->loseMoney(newSpot->getRent() * multiply);
-	owner->addMoney(newSpot->getRent() * multiply);
+	player->loseMoney(newSpot->getRent(roll) * multiply);
+	owner->addMoney(newSpot->getRent(roll) * multiply);
 } 
 
 shared_ptr<Player>
