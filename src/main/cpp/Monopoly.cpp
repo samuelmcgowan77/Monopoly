@@ -284,7 +284,7 @@ void Monopoly::drawChanceCard() {
 	shared_ptr<Player> owner;
 	int originalSpot = player->getLocationNum();
 	shared_ptr<BoardTile> newSpot;
-	print("Your card is: ", false, false);
+
 	switch(cardNum)
 	{
 		case 0:
@@ -387,6 +387,83 @@ void Monopoly::drawChanceCard() {
 			print("Advance to St. Charles Place--if you pass Go, collect $200.", true, false);
 			movePlayerToSpot(11);
 			landOnHouseTile();
+			// Wait until chanceCard branch is merged in
+			break;
+	}
+}
+
+void
+Monopoly::drawCommunityChest() {
+	int cardNum = rand() % 17;
+	shared_ptr<Player> player = getCurrentPlayer();
+	shared_ptr<Player> owner;
+	int originalSpot = player->getLocationNum();
+	BoardTile *newSpot;
+	print("Your card is: ", false, false);
+	switch(cardNum) {
+		case 1:
+			print("Bank error in your favor. Collect $200.", true, false);
+			player->addMoney(200);
+			break;
+		case 2:
+			print("Doctor's fees. Pay $50.",true, false);
+			player->loseMoney(50);
+			break;
+		case 3:
+			print("From sale to stock you get $50.", true, false);
+			player->addMoney(50);
+			break;
+		case 4:
+			print("Get Out of Jail Free.", true, false);
+			player->setOutOfJailCard(true);
+			break;
+		case 5:
+			print("Go to Jail.", true, false);
+			// Wait until chanceCard branch is merged in
+			break;
+		case 6:
+			print("Grand Opera Night. Collect $50 from every player for opening night seats.", true, false);
+			// Wait until chanceCard branch is merged in
+			break;
+		case 7:
+			print("Holiday Fund matures. Receive $100.", true, false);
+			player->addMoney(100);
+			break;
+		case 8:
+			print("Income tax refund. Collect $20.", true, false);
+			player->addMoney(20);
+			break;
+		case 9:
+			print("It is your birthday. Collect $10 from every player.", true, false);
+			// Wait until chanceCard branch is merged in
+			break;
+		case 10:
+			print("Life insurace matures. Collect $100.", true, false);
+			player->addMoney(100);
+			break;
+		case 11:
+			print("Hospital Fees. Pay $50.", true, false);
+			player->loseMoney(50);
+			break;
+		case 12:
+			print("School Fees. Pay $50.", true, false);
+			player->loseMoney(50);
+			break;
+		case 13:
+			print("Receive $25 consultancy fee.", true, false);
+			player->addMoney(25);
+			break;
+		case 14:
+			print("You are assessed for street repairs. Pay $40 per house and $115 per hotel you own.", true, false);
+			// Wait until chanceCard branch is merged in
+			break;
+		case 15:
+			print("You have won second prize in a beauty contest. Collect $10.", true, false);
+			player->addMoney(10);
+			break;
+		case 16:
+			print("You inherit $100", true, false);
+			player->addMoney(100);
 			break;
 	}
 }

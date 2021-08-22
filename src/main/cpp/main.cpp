@@ -185,6 +185,7 @@ int main()
 				game.landOnHouseTile();
 				break;
 			case CHEST:
+				game.drawCommunityChest();
 				break;
 			case FREE:
 				break;
