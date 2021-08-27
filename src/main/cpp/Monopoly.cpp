@@ -440,13 +440,12 @@ Monopoly::payEachPlayer(int val) {
 void
 Monopoly::payHouseRepairs(shared_ptr<Player> player) {
 	list<shared_ptr<HouseTile>> ownedHouses = getOwnedHouses(player);
-	shared_ptr<HouseTile> currentHouse;
 	int total = 0;
 	int numHouses;
 
 	// list<HouseTile *>::iterator it;
 	// for(it = ownedHouses.begin(); it != ownedHouses.end(); it++) {
-	for (shared_ptr<HouseTile> tile:ownedHouses) {
+	for (const auto tile:ownedHouses) {
 		numHouses = tile->getNumHouses();
 		if (numHouses <= 4) {
 			total += numHouses * 25;
