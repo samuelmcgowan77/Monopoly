@@ -132,6 +132,7 @@ void Player::setTurnsInJail(int v) {
 
 void Player::getOutOfJail() {
 	turnsInJail = -1;
+	resetNumDoubles();
 }
 /*
 int Player::getDebt()

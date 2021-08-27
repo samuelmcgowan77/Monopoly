@@ -1,6 +1,6 @@
 #include "Monopoly.h"
 
-Monopoly::Monopoly(Board *b, shared_ptr<PlayerLine> l) {
+Monopoly::Monopoly(shared_ptr<Board> b, shared_ptr<PlayerLine> l) {
     board = b;
     line = l;
 }
@@ -22,8 +22,8 @@ Monopoly::gameOver() {
 
 int 
 Monopoly::roll() {
-    dice1 = rand() % 6 + 1;
-	dice2 = rand() % 6 + 1;
+    dice1 = 1; //rand() % 6 + 1;
+	dice2 = 1; //rand() % 6 + 1;
 
 	print("You rolled a " + to_string(dice1) + " and a " + to_string(dice2) + "!", true, false);
     
@@ -58,15 +58,15 @@ Monopoly::attemptOutOfJail() {
             string ans;
             bool answered = false;
 
-            while (answered) {
+            while (!answered) {
 				print("Would you like to get out of jail for $50? (y/n)", false, false);
                 cin >> ans;
 				getchar();
 
                 if(ans == "y") {
                     player->loseMoney(50);
-					print("You now have $" + to_string(player->getMoney()) + ".", true, false);
                     player->getOutOfJail();
+					print("Press any key to roll!");
                     roll();
                     answered = true;
                 }
@@ -90,7 +90,7 @@ void Monopoly::rollDiceInJail(shared_ptr<Player> player) {
 
     int r = roll();
     if(rollDoubles()) {
-		print("You got doubles!", true, false);
+		print("You got doubles! You will now move out of jail from your roll!", true, false);
         player->getOutOfJail();
     }
     else {
@@ -115,16 +115,16 @@ Monopoly::getCurrentPlayer() {
     return line->frontLine();
 }
 
-BoardTile*
+shared_ptr<BoardTile>
 Monopoly::getCurrentTile() {
     int loc = getCurrentPlayer()->getLocationNum();
     return board->getTile(loc);
 }
 
-/* Separate this out to two different functions, one for each tile */
+/* Put the landOn functions into one? */
 void
 Monopoly::landOnRailroadTile(int multiply) {
-	RailroadTile *railroadTile = (RailroadTile *) getCurrentTile();
+	shared_ptr<RailroadTile> railroadTile(static_pointer_cast<RailroadTile>(getCurrentTile()));
     shared_ptr<Player> owner(railroadTile->getOwner());
     shared_ptr<Player> player(getCurrentPlayer());
 
@@ -137,7 +137,7 @@ Monopoly::landOnRailroadTile(int multiply) {
 
 void
 Monopoly::landOnUtilityTile() {
-	UtilityTile *utilityTile = (UtilityTile *) getCurrentTile();
+	shared_ptr<UtilityTile> utilityTile(static_pointer_cast<UtilityTile>(getCurrentTile()));
 	shared_ptr<Player> owner(utilityTile->getOwner());
     shared_ptr<Player> player(getCurrentPlayer());
 
@@ -150,23 +150,21 @@ Monopoly::landOnUtilityTile() {
 
 void 
 Monopoly::landOnHouseTile() {
-    HouseTile *houseTile = (HouseTile *)getCurrentTile();
+    shared_ptr<HouseTile> houseTile(static_pointer_cast<HouseTile>(getCurrentTile()));
     shared_ptr<Player> owner(houseTile->getOwner());
     shared_ptr<Player> player(getCurrentPlayer());
 
     if(!owner) {
         askToBuyProperty(player, houseTile);
-    } else if(!houseTile->isMortgaged()) {
-        player->loseMoney(houseTile->getRent());
-        owner->addMoney(houseTile->getRent());
-		print("Had to pay $" + to_string(houseTile->getRent()) + " rent to " + owner->getName(), true, false);
-    } else {
+    } else if(owner->getPlayerNum() != player->getPlayerNum() && !houseTile->isMortgaged()) {
+        payRentTo(player, owner, houseTile);
+    } else if (houseTile->isMortgaged()) {
 		print("Since the house is currently mortgaged, you don't have to pay rent!", true, false);
 	}
 }
 
 void 
-Monopoly::askToBuyProperty(shared_ptr<Player> player, BoardTile* propertyTile) {
+Monopoly::askToBuyProperty(shared_ptr<Player> player, shared_ptr<BoardTile> propertyTile) {
 	if(propertyTile->getCostToBuy() > player->getMoney()) {
 			print("You do not have enough funds to buy.", true, false);
             return;
@@ -186,7 +184,7 @@ Monopoly::askToBuyProperty(shared_ptr<Player> player, BoardTile* propertyTile) {
             }
             else if(ans == "n") {
 				if(propertyTile->getType() == HOUSE) {
-					auctionHouse((HouseTile *) propertyTile);
+					auctionHouse(static_pointer_cast<HouseTile>(propertyTile));
 				}
                 answered = true;
             }
@@ -197,7 +195,7 @@ Monopoly::askToBuyProperty(shared_ptr<Player> player, BoardTile* propertyTile) {
 }
 
 void 
-Monopoly::auctionHouse(HouseTile *house) {
+Monopoly::auctionHouse(shared_ptr<HouseTile> house) {
     PlayerLine copyLine = *line;    
     int bid[copyLine.getNumPlayers()];
     int givingBid = 0;
@@ -285,7 +283,7 @@ void Monopoly::drawChanceCard() {
 	shared_ptr<Player> player = getCurrentPlayer();
 	shared_ptr<Player> owner;
 	int originalSpot = player->getLocationNum();
-	BoardTile *newSpot;
+	shared_ptr<BoardTile> newSpot;
 	print("Your card is: ", false, false);
 	switch(cardNum)
 	{
@@ -406,10 +404,10 @@ Monopoly::sendPlayerToJail(shared_ptr<Player> player) {
 void
 Monopoly::moveCurrentPlayer(int roll) {
 	shared_ptr<Player> player = getCurrentPlayer();
-	int origionalSpot = player->getLocationNum();
+	int originalSpot = player->getLocationNum();
 	player->move(roll);
 
-	if(player->getLocationNum() < origionalSpot) {
+	if(player->getLocationNum() < originalSpot) {
 		print("You recieved $200!");
 		player->addMoney(200);
 	}
@@ -441,14 +439,14 @@ Monopoly::payEachPlayer(int val) {
 
 void
 Monopoly::payHouseRepairs(shared_ptr<Player> player) {
-	list<HouseTile *> ownedHouses = getOwnedHouses(player);
-	HouseTile * currentHouse;
+	list<shared_ptr<HouseTile>> ownedHouses = getOwnedHouses(player);
+	shared_ptr<HouseTile> currentHouse;
 	int total = 0;
 	int numHouses;
 
 	// list<HouseTile *>::iterator it;
 	// for(it = ownedHouses.begin(); it != ownedHouses.end(); it++) {
-	for (HouseTile *tile:ownedHouses) {
+	for (shared_ptr<HouseTile> tile:ownedHouses) {
 		numHouses = tile->getNumHouses();
 		if (numHouses <= 4) {
 			total += numHouses * 25;
@@ -462,17 +460,17 @@ Monopoly::payHouseRepairs(shared_ptr<Player> player) {
 	print("You had to pay $" + to_string(total) + ".");
 }
 
-list<HouseTile *> 
+list<shared_ptr<HouseTile>> 
 Monopoly::getOwnedHouses(shared_ptr<Player> player) {
-	list<HouseTile *> ownedHouses;
-	BoardTile * tile;
+	list<shared_ptr<HouseTile>> ownedHouses;
+	shared_ptr<BoardTile> tile;
 	shared_ptr<Player> owner;
 	int playerNum = player->getPlayerNum();
 	for(int i = 0; i < 40; i++) {
 		tile = board->getTile(i);
 		owner = tile->getOwner();
 		if(owner && tile->getType() == HOUSE && owner->getPlayerNum() == playerNum) {
-			ownedHouses.push_back((HouseTile *) tile);
+			ownedHouses.push_back(static_pointer_cast<HouseTile>(tile));
 		}
 	}
 
@@ -480,8 +478,8 @@ Monopoly::getOwnedHouses(shared_ptr<Player> player) {
 }
 
 void
-Monopoly::payRentTo(shared_ptr<Player> player, shared_ptr<Player> owner, BoardTile* newSpot, int multiply, int roll) {
-	print("You have to pay $" + to_string(newSpot->getRent() * multiply) + " rent to " + owner->getName() + ".");
+Monopoly::payRentTo(shared_ptr<Player> player, shared_ptr<Player> owner, shared_ptr<BoardTile> newSpot, int multiply, int roll) {
+	print("You have to pay $" + to_string(newSpot->getRent(roll) * multiply) + " rent to " + owner->getName() + ".");
 	player->loseMoney(newSpot->getRent(roll) * multiply);
 	owner->addMoney(newSpot->getRent(roll) * multiply);
 } 
@@ -586,7 +584,7 @@ Monopoly::drawBoard() {
 				break;
 			case 10:
 				if (player->inJail())
-					px[i] = 10 - i;
+					px[i] = 6 + i;
 				else 
 					px[i] = 1 + i;
 				py[i] = 2;

@@ -11,7 +11,7 @@ int main()
 	int numPlayers;
 	shared_ptr<PlayerLine> line(new PlayerLine());
 	shared_ptr<Player> currentPlayer;
-	BoardTile *currentTile;
+	shared_ptr<BoardTile> currentTile;
 	int originalLocation;
 	bool initiallyInJail = false;
 	
@@ -59,48 +59,46 @@ int main()
 	HouseTile Boardwalk("Boardwalk", BLUE_M, 400, 200, 50, 200, 600, 1400, 1700, 2000, 200);
 	
 	Board board;
-	board.addTile(&start);
-	board.addTile(&MediterraneanAvenue);
-	board.addTile(&chest1);
-	board.addTile(&BalticAvenue);
-	board.addTile(&tax1);
-	board.addTile(&ReadingRailroad);
-	board.addTile(&OrientalAvenue);
-	board.addTile(&chance1);
-	board.addTile(&VermontAvenue);
-	board.addTile(&ConnecticutAvenue);
-	board.addTile(&jail);
-	board.addTile(&StCharlesPlace);
-	board.addTile(&ElectricCompany);
-	board.addTile(&StatesAvenue);
-	board.addTile(&VirginiaAvenue);
-	board.addTile(&PennsylvaniaRailroad);
-	board.addTile(&StJamesPlace);
-	board.addTile(&chest2);
-	board.addTile(&TenesseeAvenue);
-	board.addTile(&NewYorkAvenue);
-	board.addTile(&FreeParking);
-	board.addTile(&KentuckyAvenue);
-	board.addTile(&chance2);
-	board.addTile(&IndianaAvenue);
-	board.addTile(&IllinoisAvenue);
-	board.addTile(&BandORailroad);
-	board.addTile(&AtlanticAvenue);
-	board.addTile(&VentnorAvenue);
-	board.addTile(&WaterWorks);
-	board.addTile(&MarvinGardens);
-	board.addTile(&GoToJail);
-	board.addTile(&PacificAvenue);
-	board.addTile(&NorthCarolinaAvenue);
-	board.addTile(&chest3);
-	board.addTile(&PennsylvaniaAvenue);
-	board.addTile(&ShortLineRailroad);
-	board.addTile(&chance3);
-	board.addTile(&ParkPlace);
-	board.addTile(&luxuryTax);
-	board.addTile(&Boardwalk);
-
-	//HouseTile ht = *(HouseTile *)board.getTile(1);
+	board.addTile(shared_ptr<BoardTile>(&start));
+	board.addTile(shared_ptr<BoardTile>(&MediterraneanAvenue));
+	board.addTile(shared_ptr<BoardTile>(&chest1));
+	board.addTile(shared_ptr<BoardTile>(&BalticAvenue));
+	board.addTile(shared_ptr<BoardTile>(&tax1));
+	board.addTile(shared_ptr<BoardTile>(&ReadingRailroad));
+	board.addTile(shared_ptr<BoardTile>(&OrientalAvenue));
+	board.addTile(shared_ptr<BoardTile>(&chance1));
+	board.addTile(shared_ptr<BoardTile>(&VermontAvenue));
+	board.addTile(shared_ptr<BoardTile>(&ConnecticutAvenue));
+	board.addTile(shared_ptr<BoardTile>(&jail));
+	board.addTile(shared_ptr<BoardTile>(&StCharlesPlace));
+	board.addTile(shared_ptr<BoardTile>(&ElectricCompany));
+	board.addTile(shared_ptr<BoardTile>(&StatesAvenue));
+	board.addTile(shared_ptr<BoardTile>(&VirginiaAvenue));
+	board.addTile(shared_ptr<BoardTile>(&PennsylvaniaRailroad));
+	board.addTile(shared_ptr<BoardTile>(&StJamesPlace));
+	board.addTile(shared_ptr<BoardTile>(&chest2));
+	board.addTile(shared_ptr<BoardTile>(&TenesseeAvenue));
+	board.addTile(shared_ptr<BoardTile>(&NewYorkAvenue));
+	board.addTile(shared_ptr<BoardTile>(&FreeParking));
+	board.addTile(shared_ptr<BoardTile>(&KentuckyAvenue));
+	board.addTile(shared_ptr<BoardTile>(&chance2));
+	board.addTile(shared_ptr<BoardTile>(&IndianaAvenue));
+	board.addTile(shared_ptr<BoardTile>(&IllinoisAvenue));
+	board.addTile(shared_ptr<BoardTile>(&BandORailroad));
+	board.addTile(shared_ptr<BoardTile>(&AtlanticAvenue));
+	board.addTile(shared_ptr<BoardTile>(&VentnorAvenue));
+	board.addTile(shared_ptr<BoardTile>(&WaterWorks));
+	board.addTile(shared_ptr<BoardTile>(&MarvinGardens));
+	board.addTile(shared_ptr<BoardTile>(&GoToJail));
+	board.addTile(shared_ptr<BoardTile>(&PacificAvenue));
+	board.addTile(shared_ptr<BoardTile>(&NorthCarolinaAvenue));
+	board.addTile(shared_ptr<BoardTile>(&chest3));
+	board.addTile(shared_ptr<BoardTile>(&PennsylvaniaAvenue));
+	board.addTile(shared_ptr<BoardTile>(&ShortLineRailroad));
+	board.addTile(shared_ptr<BoardTile>(&chance3));
+	board.addTile(shared_ptr<BoardTile>(&ParkPlace));
+	board.addTile(shared_ptr<BoardTile>(&luxuryTax));
+	board.addTile(shared_ptr<BoardTile>(&Boardwalk));
 	
 	cout << "Welcome to Monopoly! Enter number of players: ";
 	cin >> numPlayers;
@@ -119,7 +117,7 @@ int main()
 	for(int i = 0; i < numPlayers; i++)
 		line->addPlayer(name[i], i + 1);
 	
-	Monopoly game(&board, line);
+	Monopoly game(shared_ptr<Board>(&board), line);
 	
 	// shared_ptr<Player> p(line->frontLine());
 	// 
