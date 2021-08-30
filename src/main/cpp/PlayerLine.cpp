@@ -85,12 +85,12 @@ PlayerLine::findPlayer(int v) {
 // 	}
 // }
 
-PlayerLine &PlayerLine::operator=(shared_ptr<PlayerLine> rhs) {
-	shared_ptr<Player> player(rhs->frontLine());
-	for (int i = 0; i < rhs->getNumPlayers(); i++) {
-	    this->addPlayer(player->getName(),player->getPlayerNum(), player->getLocationNum());
-		rhs->nextTurn();
-		player = rhs->frontLine();
+PlayerLine PlayerLine::operator=(PlayerLine rhs) {
+	shared_ptr<Player> player(rhs.frontLine());
+	for (int i = 0; i < rhs.getNumPlayers(); i++) {
+	    this->addPlayer(player);
+		rhs.nextTurn();
+		player = rhs.frontLine();
 	}
 
 	return *this;

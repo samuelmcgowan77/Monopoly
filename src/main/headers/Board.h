@@ -8,12 +8,12 @@
 class Board
 {
 	private:
-		BoardTile *tiles[40];
+		shared_ptr<BoardTile> tiles[40];
 		int numTiles;
 	public:
 		Board();
-		void addTile(BoardTile *t);
-		BoardTile *getTile(int t);
+		void addTile(shared_ptr<BoardTile> t);
+		shared_ptr<BoardTile> getTile(int t);
 };
 
 #endif

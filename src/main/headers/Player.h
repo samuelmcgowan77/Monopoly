@@ -15,6 +15,7 @@ class Player
 		int money;
 		int numRailroads;
 		int turnsInJail;
+		int numDoubles;
 		int locationNum;
 		bool outOfJailCard;
 		int numUtilities;
@@ -27,10 +28,14 @@ class Player
 		int getLocationNum();
 		void setLocationNum(int r);
 		void move(int roll);
+		void goToSpot(int val);
 		void goToJail();
 		int getTurnsInJail();
 		void setTurnsInJail(int v);
 		void getOutOfJail();
+		int getNumDoubles();
+		void incNumDoubles();
+		void resetNumDoubles();
 		void goToStart();
 		int getMoney();
 		void setMoney(int v);

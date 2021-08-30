@@ -25,7 +25,7 @@ class PlayerLine
 		shared_ptr<Player> frontLine() const;
 		shared_ptr<Player> findPlayer(int v);
 		// void clone(PlayerLine *rhs);
-		PlayerLine &operator=(shared_ptr<PlayerLine> rhs);
+		PlayerLine operator=(PlayerLine rhs);
 };
 
 #endif

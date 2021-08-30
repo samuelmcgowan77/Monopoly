@@ -9,6 +9,7 @@ Player::Player(string s, int p, int loc)
 	money = 1500;
 	numRailroads = 0;
 	turnsInJail = -1;
+	numDoubles = 0;
 	locationNum = loc;
 	outOfJailCard = false;
 	numUtilities = 0;
@@ -27,15 +28,36 @@ int Player::getLocationNum()
 	return locationNum;
 }
 
+void Player::setLocationNum(int val) {
+	locationNum = val;
+}
+
 void Player::move(int roll)
 {
 	locationNum = (locationNum + roll) % 40;
+}
+
+//TODO: Use this function to check and see if the player passed go or not. 
+void Player::goToSpot(int val) {
+	locationNum = val;
 }
 
 void Player::goToJail()
 {
 	locationNum = 10;
 	turnsInJail = 0;
+}
+
+int Player::getNumDoubles() {
+	return numDoubles;
+}
+
+void Player::incNumDoubles() {
+	numDoubles++;
+}
+
+void Player::resetNumDoubles() {
+	numDoubles = 0;
 }
 
 void Player::goToStart()
@@ -110,6 +132,7 @@ void Player::setTurnsInJail(int v) {
 
 void Player::getOutOfJail() {
 	turnsInJail = -1;
+	resetNumDoubles();
 }
 /*
 int Player::getDebt()

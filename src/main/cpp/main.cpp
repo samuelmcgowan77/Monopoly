@@ -4,234 +4,16 @@
 #include<queue>
 #include "Monopoly.h"
 
-/*
-void landOnHouseTile(Player *p, Board* b)
-{
-	bool madeDecision = false;
-	int costToSell;
-	BoardTile *currentPosition = b->getTile(p->getLocationNum());
-	 << "You landed on " << currentPosition->getName() << "." << endl;
-		if (currentPosition->getOwner() == NULL)
-		{
-			cout << "No one currently owns this tile. Would you like to buy it? The cost to buy is $" << currentPosition->getCostToBuy() << ". Say buy(b) or no(n) to continue. ";
-			cin >> answer;
-			switch(answer)
-			{
-				case 'b':
-					if(currentPlayer->getMoney() >= currentPosition->getCostToBuy())
-					{
-						currentPosition->setOwner(currentPlayer);
-						currentPlayer->setMoney(currentPlayer->getMoney() - currentPosition->getCostToBuy());
-						cout << "Congratulations! You are the new owner of " << currentPosition->getName() << "!" << endl;
-					}
-					else 
-						cout << "Do not have enough money to buy " << currentPosition->getName() << ".";
-					break;
-			}
-		}
-		else if(currentPosition->getOwner() != currentPlayer && !currentPosition->isMortgaged())
-		{
-			if(currentPlayer->getMoney() >= currentPosition->getRent())
-			{
-				currentPlayer->setMoney(currentPlayer->getMoney() - currentPosition->getRent());
-				currentPosition->getOwner()->setMoney(currentPosition->getOwner()->getMoney() + currentPosition->getRent());
-				cout << "You had to pay rent of $" << currentPosition->getRent() << "! You now have $" << currentPlayer->getMoney() << "." << endl;
-				cout << currentPosition->getOwnerName() << " now has $" << currentPosition->getOwner()->getMoney() << "." << endl;
-			}
-			else
-			{
-				cout << "Oh no! You do not have the money to pay rent for " << currentPosition->getName() << ". Are you willing to sell or mortgage one of your properties? If so, enter 's' or 'm' If not, please enter 'n'.";
-				while (!madeDecision)
-				{
-					cin >> answerString;
-					if (answerString == "n")
-					{
-						currentPlayer->gotoJail();
-						currentPlayer->gameOver();
-						cout << "You didn't have enough money to pay rent so now you're bankrupt! Game over for you!" << endl;
-						getch();
-						Draw(board, line);
-					}
-					else if (answerString == "s")
-					{
-						bool houseFound = false;
-						while(!houseFound)
-						{
-							cout << "Please enter which property you want to sell: ";
-							cin >> answerString;
-							
-							for (int i = 0; i < 40; i++)
-							{
-								if(board.getTile(i)->getName() == answerString && board.getTile(i)->getOwnerName() == currentPlayer->getName())
-								{
-									bool rightPrice = false;
-									while(!rightPrice)
-									{
-										cout << "Please enter the agreed price: ";
-										cin >> costToSell;
-										if(costToSell < currentPosition->getCostToBuy() + currentPlayer->getMoney())
-										{
-											cout << "Cost to sell is less than rent plus what " << currentPlayer->getName() << " currently has. Must be higher." << endl;
-											continue;
-										}
-										rightPrice = true;
-									}
-									board.getTile(i)->setOwner(currentPosition->getOwner());
-									currentPlayer->setMoney(currentPlayer->getMoney() + costToSell - currentPosition->getCostToBuy());
-									currentPosition->getOwner()->setMoney(currentPosition->getOwner()->getMoney() + currentPosition->getCostToBuy() - costToSell);
-									cout << board.getTile(i)->getName() << " now belongs to " << board.getTile(i)->getOwnerName() << "." << endl;
-									houseFound = true;
-									break;
-								}
-							}
-							if(!houseFound)
-								cout << answerString << " could not be found. Please try again." << endl;
-						}		
-					}
-					else if (answerString == "m")
-				}	
-			}
-		} else 
-						cout << "This tile is mortgaged so you do not have to pay any rent. " << endl;
-}
-*/
-
-//***WORK ON THIS NEXT!!!***
-/* void drawChanceCard(Player *p, PlayerLine *l, Board *b)
-{
-	int cardNum = rand() % 16;
-	int originalSpot = p->getLocationNum();
-	BoardTile *newSpot;
-	char answer;
-	bool madeDecision = false;
-	cout << "Your card is: " << endl;
-	switch(cardNum)
-	{
-		case 0:
-			cout << "Advance to Go (Collect $200)." << endl;
-			p->goToStart();
-			p->setMoney(p->getMoney() + 200);
-			break;
-		case 1:
-			cout << "Advance to Illinois Ave--If you pass Go, collect $200." << endl;
-			p->setLocationNum(24);
-			if(originalSpot > 24)
-			{
-				cout << "You recieved $200!" << endl;
-				p->setMoney(p->getMoney() + 200);
-			}
-			newSpot = b->getTile(24);
-			if (newSpot->getOwner() == NULL)
-			{
-				cout << "No one currently owns this tile. Would you like to buy/mortgage it? The cost to buy is $" << newSpot->getCostToBuy() << " and the cost to mortgage is $" << newSpot->getMortgage() <<". If yes, please state which one(b/m/n). ";
-				while (!madeDecision)
-				{
-					cin >> answer;
-					switch (answer)
-					{
-						case 'b':
-							if(p->getMoney() >= newSpot->getCostToBuy())
-							{
-								newSpot->setOwner(p);
-								p->setMoney(p->getMoney() - newSpot->getCostToBuy());
-								cout << "Congratulations! You are the new owner of " << newSpot->getName() << "!" << endl;
-								madeDecision = true;
-							}
-							else 
-								cout << "Do not have enough money to buy " << newSpot->getName() << ". Please select another option.";
-							break;
-						case 'm':
-							if(p->getMoney() >= newSpot->getMortgage())
-							{
-								newSpot->setOwner(p);
-								p->setMoney(p->getMoney() - newSpot->getMortgage());
-								cout << "Congratulations! You have mortgaged " << newSpot->getName() << "!" << endl;
-								madeDecision = true;
-							}
-							else 
-								cout << "Do not have enough money to mortgage " << newSpot->getName() << ". Please select another option.";
-								break;
-						default:
-							break;
-					}
-							
-				}
-			} else if(newSpot->getOwner() != p && !newSpot->isMortgaged())
-				{
-					if(p->getMoney() >= newSpot->getRent())
-					{
-						p->setMoney(p->getMoney() - newSpot->getRent());
-						cout << "You had to pay rent of $" << newSpot->getRent() << "! You now have $" << p->getMoney() << "." << endl;
-					}
-					else
-					{
-						p->goToJail();
-						p->setDebt(newSpot->getRent());
-						p->setInDebtTo(newSpot->getOwner());
-						cout << "You didn't have enough money to pay rent so you have to go to jail! You now have a debt of $" << p->getDebt() << " to "<< p->getInDebtTo() << "! Press enter to go to jail!"<< endl;
-					}
-				}
-			break;
-		case 2:
-			cout << "Advance token to nearest Utility. If unowned you may buy if from the Bank. If owned, throw dice and pay owner a total ten times the amount thrown." << endl;
-			break;
-		case 3:
-			cout << "Advance token to the nearest Railroad and pay owner twice the rental to which he/she is otherwise entitled. If Railroad is unowned, you may buy it from the Bank." << endl;
-			break;
-		case 4:
-			cout << "Bank pays you dividend of $50." << endl;
-			break;
-		case 5:
-			cout << "Get out of Jail Free." << endl;
-			break;
-		case 6:
-			cout << "Go back 3 spaces." << endl;
-			break;
-		case 7:
-			cout << "Go to Jail--go directly to jail--do not pass Go, do not collect $200." << endl;
-			break;
-		case 8:
-			cout << "Make general repairs on all your property--for each house pay $25--for each hotel $100." << endl;
-			break;
-		case 9:
-			cout << "Pay poor tax of $15." << endl;
-			break;
-		case 10:
-			cout << "Take a trip to Reading Railroad--if you pass Go, collect $200." << endl;
-			break;
-		case 11:
-			cout << "Take a walk on the Boardwalk--advance token to Boardwalk." << endl;
-			break;
-		case 12:
-			cout << "You have been elected Chairman of the Board. Pay each player $50." << endl;
-			break;
-		case 13:
-			cout << "Your building and loan matures--collect $150." << endl;
-			break;
-		case 14:
-			cout << "You have won a crossword competition--collect $100." << endl;
-			break;
-		case 15:
-			cout << "Advance to St. Charles Place--if you pass Go, collect $200." << endl;
-			break;
-	}
-} */
-
 using namespace std;
 
 int main()
 {
-	int numPlayers, dice1, dice2;
-	char answer;
-	string answerString;
+	int numPlayers;
 	shared_ptr<PlayerLine> line(new PlayerLine());
 	shared_ptr<Player> currentPlayer;
-	BoardTile *currentTile;
+	shared_ptr<BoardTile> currentTile;
 	int originalLocation;
-	int numOfDoubles = 0;
-	bool madeDecision = false;
 	bool initiallyInJail = false;
-	HouseTile *sellingTile;
 	
 	//Create all of the board tiles
 	//These are in the order of the actual board
@@ -277,48 +59,46 @@ int main()
 	HouseTile Boardwalk("Boardwalk", BLUE_M, 400, 200, 50, 200, 600, 1400, 1700, 2000, 200);
 	
 	Board board;
-	board.addTile(&start);
-	board.addTile(&MediterraneanAvenue);
-	board.addTile(&chest1);
-	board.addTile(&BalticAvenue);
-	board.addTile(&tax1);
-	board.addTile(&ReadingRailroad);
-	board.addTile(&OrientalAvenue);
-	board.addTile(&chance1);
-	board.addTile(&VermontAvenue);
-	board.addTile(&ConnecticutAvenue);
-	board.addTile(&jail);
-	board.addTile(&StCharlesPlace);
-	board.addTile(&ElectricCompany);
-	board.addTile(&StatesAvenue);
-	board.addTile(&VirginiaAvenue);
-	board.addTile(&PennsylvaniaRailroad);
-	board.addTile(&StJamesPlace);
-	board.addTile(&chest2);
-	board.addTile(&TenesseeAvenue);
-	board.addTile(&NewYorkAvenue);
-	board.addTile(&FreeParking);
-	board.addTile(&KentuckyAvenue);
-	board.addTile(&chance2);
-	board.addTile(&IndianaAvenue);
-	board.addTile(&IllinoisAvenue);
-	board.addTile(&BandORailroad);
-	board.addTile(&AtlanticAvenue);
-	board.addTile(&VentnorAvenue);
-	board.addTile(&WaterWorks);
-	board.addTile(&MarvinGardens);
-	board.addTile(&GoToJail);
-	board.addTile(&PacificAvenue);
-	board.addTile(&NorthCarolinaAvenue);
-	board.addTile(&chest3);
-	board.addTile(&PennsylvaniaAvenue);
-	board.addTile(&ShortLineRailroad);
-	board.addTile(&chance3);
-	board.addTile(&ParkPlace);
-	board.addTile(&luxuryTax);
-	board.addTile(&Boardwalk);
-
-	//HouseTile ht = *(HouseTile *)board.getTile(1);
+	board.addTile(shared_ptr<BoardTile>(&start));
+	board.addTile(shared_ptr<BoardTile>(&MediterraneanAvenue));
+	board.addTile(shared_ptr<BoardTile>(&chest1));
+	board.addTile(shared_ptr<BoardTile>(&BalticAvenue));
+	board.addTile(shared_ptr<BoardTile>(&tax1));
+	board.addTile(shared_ptr<BoardTile>(&ReadingRailroad));
+	board.addTile(shared_ptr<BoardTile>(&OrientalAvenue));
+	board.addTile(shared_ptr<BoardTile>(&chance1));
+	board.addTile(shared_ptr<BoardTile>(&VermontAvenue));
+	board.addTile(shared_ptr<BoardTile>(&ConnecticutAvenue));
+	board.addTile(shared_ptr<BoardTile>(&jail));
+	board.addTile(shared_ptr<BoardTile>(&StCharlesPlace));
+	board.addTile(shared_ptr<BoardTile>(&ElectricCompany));
+	board.addTile(shared_ptr<BoardTile>(&StatesAvenue));
+	board.addTile(shared_ptr<BoardTile>(&VirginiaAvenue));
+	board.addTile(shared_ptr<BoardTile>(&PennsylvaniaRailroad));
+	board.addTile(shared_ptr<BoardTile>(&StJamesPlace));
+	board.addTile(shared_ptr<BoardTile>(&chest2));
+	board.addTile(shared_ptr<BoardTile>(&TenesseeAvenue));
+	board.addTile(shared_ptr<BoardTile>(&NewYorkAvenue));
+	board.addTile(shared_ptr<BoardTile>(&FreeParking));
+	board.addTile(shared_ptr<BoardTile>(&KentuckyAvenue));
+	board.addTile(shared_ptr<BoardTile>(&chance2));
+	board.addTile(shared_ptr<BoardTile>(&IndianaAvenue));
+	board.addTile(shared_ptr<BoardTile>(&IllinoisAvenue));
+	board.addTile(shared_ptr<BoardTile>(&BandORailroad));
+	board.addTile(shared_ptr<BoardTile>(&AtlanticAvenue));
+	board.addTile(shared_ptr<BoardTile>(&VentnorAvenue));
+	board.addTile(shared_ptr<BoardTile>(&WaterWorks));
+	board.addTile(shared_ptr<BoardTile>(&MarvinGardens));
+	board.addTile(shared_ptr<BoardTile>(&GoToJail));
+	board.addTile(shared_ptr<BoardTile>(&PacificAvenue));
+	board.addTile(shared_ptr<BoardTile>(&NorthCarolinaAvenue));
+	board.addTile(shared_ptr<BoardTile>(&chest3));
+	board.addTile(shared_ptr<BoardTile>(&PennsylvaniaAvenue));
+	board.addTile(shared_ptr<BoardTile>(&ShortLineRailroad));
+	board.addTile(shared_ptr<BoardTile>(&chance3));
+	board.addTile(shared_ptr<BoardTile>(&ParkPlace));
+	board.addTile(shared_ptr<BoardTile>(&luxuryTax));
+	board.addTile(shared_ptr<BoardTile>(&Boardwalk));
 	
 	cout << "Welcome to Monopoly! Enter number of players: ";
 	cin >> numPlayers;
@@ -337,10 +117,10 @@ int main()
 	for(int i = 0; i < numPlayers; i++)
 		line->addPlayer(name[i], i + 1);
 	
-	Monopoly game(&board, line);
+	Monopoly game(shared_ptr<Board>(&board), line);
 	
-	shared_ptr<Player> p(line->frontLine());
-	
+	// shared_ptr<Player> p(line->frontLine());
+	// 
 	// while(!game.gameOver()) {
 	// 	game.drawBoard();
 	// 	for(int i = 0; i < line.getNumPlayers(); i++) {
@@ -364,8 +144,17 @@ int main()
 		
 		if(!currentPlayer->inJail()) {
 			game.print(currentPlayer->getName() + "'s turn! Press any key to roll!");
-			currentPlayer->move(game.roll());
+			game.moveCurrentPlayer(game.roll());
 			// currentPlayer->move(1);	
+			if (game.rollDoubles()) {
+				currentPlayer->incNumDoubles();
+				if (currentPlayer->getNumDoubles() >= 3) {
+					game.print("This is your third double in a row! You're going to jail");
+					game.sendPlayerToJail(currentPlayer);
+					line->nextTurn();
+					continue;
+				}
+			}
 		}
 		else {
 			game.print(currentPlayer->getName() + "'s turn!");
@@ -374,29 +163,23 @@ int main()
 				line->nextTurn();
 				continue;
 			}
-			currentPlayer->move(game.getRoll());
+			game.moveCurrentPlayer(game.getRoll());
 		}
 
 		currentTile = game.getCurrentTile();
 
-    	game.print("You rolled a " + to_string(game.getDie(1)) + " and a " + to_string(game.getDie(2)) + "!", true, false);
 		game.print("Landed on " + currentTile->getName() + "!");
-
-		if(currentPlayer->getLocationNum() < originalLocation) {
-			game.print("Since you passed GO you received $200!", true, false);
-			currentPlayer->addMoney(200);
-		}
 		
 		switch(currentTile->getType())
 		{
 			case GO: 
 				break;
 			case JAIL:
-				cout << "Just passing through!" << endl;
+				game.print("Just passing through!");
 				break;
 			case GOTOJAIL:
 				cout << "You're going to jail!" << endl;
-				// currentPlayer->goToJail();
+				currentPlayer->goToJail();
 				break;
 			case HOUSE: //Change it to where if you can't pay rent then you either sell a property to the owner or go bankrupt(game over)
 				game.landOnHouseTile();
@@ -406,16 +189,20 @@ int main()
 			case FREE:
 				break;
 			case RAILROAD:
+				game.landOnRailroadTile();
 				break;
 			case CHANCE:
+				game.drawChanceCard();
 				break;
 			case TAX:
 				game.print("You have to pay $75!", true, false);
+				currentPlayer->loseMoney(75);
 				break;
 			case LUXURYTAX:
 				game.landOnLuxuryTaxTile();
 				break;
 			case UTILITY:
+				game.landOnUtilityTile();
 				break;
 		}
 		if(game.rollDoubles() && !initiallyInJail) {

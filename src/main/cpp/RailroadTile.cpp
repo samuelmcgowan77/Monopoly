@@ -28,8 +28,13 @@ RailroadTile::getOwner() const
 
 void 
 RailroadTile::setOwner(shared_ptr<Player> o)
-{
+{	
+	if(owner) {
+		owner->setNumRailroads(owner->getNumRailroads() - 1);
+	}
 	owner = o;
+	owner->setNumRailroads(owner->getNumRailroads() + 1);
+
 }
 
 int 

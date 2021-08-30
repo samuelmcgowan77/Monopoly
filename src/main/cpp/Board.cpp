@@ -7,13 +7,13 @@ Board::Board()
 	numTiles = 0;
 }
 
-void Board::addTile(BoardTile *t)
+void Board::addTile(shared_ptr<BoardTile> t)
 {
 	tiles[numTiles] = t;
 	numTiles++;
 }
 
-BoardTile *Board::getTile(int t)
+shared_ptr<BoardTile> Board::getTile(int t)
 {
 	return tiles[t];
 }

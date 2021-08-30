@@ -25,7 +25,11 @@ UtilityTile::getOwner() const
 void 
 UtilityTile::setOwner(shared_ptr<Player> o)
 {
+	if (owner) {
+		owner->setNumUtilities(owner->getNumUtilities() - 1);
+	}
 	owner = o;
+	owner->setNumUtilities(owner->getNumUtilities() + 1);
 }
 
 int 
@@ -37,11 +41,7 @@ UtilityTile::getCostToBuy() const
 int 
 UtilityTile::getRent(int roll) const 
 {
-	//If there isn't an owner
-	if(!owner) {
-		return 0;
-	}
-	else if(owner->getNumUtilities() == 2) {
+	if(owner->getNumUtilities() == 2) {
 		return roll * 10;
 	}
 	return roll * 4;
