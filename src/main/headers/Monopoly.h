@@ -50,7 +50,8 @@ class Monopoly {
         shared_ptr<Player> getPlayerById(int id);
         shared_ptr<BoardTile> getCurrentTile();
         void payEachPlayer(int val);
-        void payHouseRepairs(shared_ptr<Player> player);
+        void collectFromEachPlayer(int val);
+        void payHouseRepairs(shared_ptr<Player> player, int houseRepair, int hotelRepair);
         list<shared_ptr<HouseTile>> getOwnedHouses(shared_ptr<Player> player);
         list<shared_ptr<BoardTile>> getOwnedProperties(shared_ptr<Player> player);
         void payRentTo(shared_ptr<Player> player, shared_ptr<Player> owner, shared_ptr<BoardTile> newSpot, int multiply=1, int roll=0);

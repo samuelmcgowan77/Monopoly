@@ -22,8 +22,8 @@ Monopoly::gameOver() {
 
 int 
 Monopoly::roll() {
-    dice1 = 1; //rand() % 6 + 1;
-	dice2 = 1; //rand() % 6 + 1;
+    dice1 = rand() % 6 + 1;
+	dice2 = rand() % 6 + 1;
 
 	print("You rolled a " + to_string(dice1) + " and a " + to_string(dice2) + "!", true, false);
     
@@ -355,7 +355,7 @@ void Monopoly::drawChanceCard() {
 			break;
 		case 8:
 			print("Make general repairs on all your property--for each house pay $25--for each hotel $100.", true, false);
-			payHouseRepairs(player);
+			payHouseRepairs(player, 25, 100);
 			break;
 		case 9:
 			print("Pay poor tax of $15.", true, false);
@@ -419,11 +419,11 @@ Monopoly::drawCommunityChest() {
 			break;
 		case 5:
 			print("Go to Jail.", true, false);
-			// Wait until chanceCard branch is merged in
+			sendPlayerToJail(player);
 			break;
 		case 6:
 			print("Grand Opera Night. Collect $50 from every player for opening night seats.", true, false);
-			// Wait until chanceCard branch is merged in
+			collectFromEachPlayer(50);
 			break;
 		case 7:
 			print("Holiday Fund matures. Receive $100.", true, false);
@@ -435,7 +435,7 @@ Monopoly::drawCommunityChest() {
 			break;
 		case 9:
 			print("It is your birthday. Collect $10 from every player.", true, false);
-			// Wait until chanceCard branch is merged in
+			collectFromEachPlayer(10);
 			break;
 		case 10:
 			print("Life insurace matures. Collect $100.", true, false);
@@ -455,7 +455,7 @@ Monopoly::drawCommunityChest() {
 			break;
 		case 14:
 			print("You are assessed for street repairs. Pay $40 per house and $115 per hotel you own.", true, false);
-			// Wait until chanceCard branch is merged in
+			payHouseRepairs(player, 40, 115);
 			break;
 		case 15:
 			print("You have won second prize in a beauty contest. Collect $10.", true, false);
@@ -507,15 +507,26 @@ Monopoly::payEachPlayer(int val) {
 	shared_ptr<Player> currentPlayer = getCurrentPlayer();
 	line->nextTurn();
 	for(int i = 0; i < line->getNumPlayers() - 1; i++) {
-		getCurrentPlayer()->addMoney(50);
+		getCurrentPlayer()->addMoney(val);
 		line->nextTurn();
 	}
-	currentPlayer->loseMoney((line->getNumPlayers() - 1) * 50);
+	currentPlayer->loseMoney((line->getNumPlayers() - 1) * val);
 
 }
 
 void
-Monopoly::payHouseRepairs(shared_ptr<Player> player) {
+Monopoly::collectFromEachPlayer(int val) {
+	shared_ptr<Player> currentPlayer = getCurrentPlayer();
+	line->nextTurn();
+	for(int i = 0; i < line->getNumPlayers() - 1; i++) {
+		getCurrentPlayer()->loseMoney(val);
+		line->nextTurn();
+	}
+	currentPlayer->addMoney((line->getNumPlayers() - 1) * val);
+}
+
+void
+Monopoly::payHouseRepairs(shared_ptr<Player> player, int houseRepair, int hotelRepair) {
 	list<shared_ptr<HouseTile>> ownedHouses = getOwnedHouses(player);
 	int total = 0;
 	int numHouses;
@@ -525,10 +536,10 @@ Monopoly::payHouseRepairs(shared_ptr<Player> player) {
 	for (const auto tile:ownedHouses) {
 		numHouses = tile->getNumHouses();
 		if (numHouses <= 4) {
-			total += numHouses * 25;
+			total += numHouses * houseRepair;
 		}
 		else {
-			total += 100;
+			total += hotelRepair;
 		}
 	}
 
