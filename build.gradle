@@ -2,10 +2,8 @@ plugins {
     id 'cpp-application'
 }
 
-repositories {
-    flatDir{
-        dirs 'src/main/headers'
-    }
+application {
+    targetMachines = [ machines.windows.x86, machines.linux.x86 ]
 }
 
 version = '0.1.0'

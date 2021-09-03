@@ -516,7 +516,7 @@ Monopoly::drawBoard() {
 	int px[numPlayers], py[numPlayers], pNum[numPlayers], where[numPlayers]; //x is j and y is i in the for loops down below
 	shared_ptr<Player> player(copyLine.frontLine());
 	
-	system("clear");
+	system(CMD);
 
 	//Resets copy of line to player 1 being in the front
 	while(player->getPlayerNum() != 1)
