@@ -1,3 +1,6 @@
+#ifndef MONOPOLY_H
+#define MONOPOLY_H
+
 #include "Board.h"
 #include "HouseTile.h"
 #include "PlayerLine.h"
@@ -8,6 +11,12 @@
 #include<cstdlib>
 #include<memory>
 #include<list>
+
+#ifdef _WIN32 || _WIN64
+#define CMD "cls"
+#else
+#define CMD "clear"
+#endif
 
 class Monopoly {
     private: 
@@ -50,3 +59,5 @@ class Monopoly {
         void endLine(int PlayerId);
         void print(string s, bool wait=true, bool reset=true);
 };
+
+#endif
