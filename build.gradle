@@ -7,3 +7,16 @@ application {
 }
 
 version = '0.1.0'
+
+// Create a custom task for linting
+task lint {
+  doLast {
+    exec {
+      if (System.properties['os.name'].toLowerCase().contains('windows')) {
+        println "Detected OS is Windows. Skipping lint task"
+      } else {
+        commandLine 'bash', '-c', 'clang-tidy src/main/cpp/*.cpp -checks=clang-analyzer-* -header-filter=.* -- -Isrc/main/headers'
+      }
+    }
+  }
+}

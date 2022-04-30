@@ -12,7 +12,7 @@
 #include<memory>
 #include<list>
 
-#ifdef _WIN32 || _WIN64
+#ifdef _WIN64
 #define CMD "cls"
 #else
 #define CMD "clear"
