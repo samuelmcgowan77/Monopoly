@@ -58,11 +58,12 @@ PlayerLine::findPlayer(int v) {
 
 	for(int i = 0; i < copyLine.getNumPlayers(); i++) {
 		if(player->getPlayerNum() == v) {
-			return player;
+		  player = copyLine.frontLine();
 		}
 		copyLine.nextTurn();
-		player = copyLine.frontLine();
 	}
+
+	return player;
 }
 
 // PlayerLine::~PlayerLine()

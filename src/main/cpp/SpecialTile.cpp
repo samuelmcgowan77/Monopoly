@@ -31,6 +31,15 @@ SpecialTile::SpecialTile(Tiletypes e)
 		case FREE:
 			name = "Free Parking Tile";
 			break;
+		case HOUSE:
+			name = "House Tile";
+			break;
+		case RAILROAD:
+			name = "Railroad Tile";
+			break;
+		case UTILITY:
+			name = "Utility Tile";
+			break;
 	}
 
 }

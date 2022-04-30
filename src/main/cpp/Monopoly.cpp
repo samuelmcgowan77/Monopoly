@@ -88,7 +88,7 @@ Monopoly::attemptOutOfJail() {
 void Monopoly::rollDiceInJail(shared_ptr<Player> player) {
 	print("You have to roll the dice in jail! Press any key to roll!", true, false);
 
-    int r = roll();
+    roll();
     if(rollDoubles()) {
 		print("You got doubles! You will now move out of jail from your roll!", true, false);
         player->getOutOfJail();
@@ -209,7 +209,7 @@ Monopoly::auctionHouse(shared_ptr<HouseTile> house) {
     }
     
     while(copyLine.getNumPlayers() > 0) {		
-		print("Number of bidders remaining: " + copyLine.getNumPlayers(), false, false);
+		print("Number of bidders remaining: " + std::to_string(copyLine.getNumPlayers()), false, false);
 
         if(bid[highestPlayer - 1] > 0) {
 			winningPlayer = copyLine.findPlayer(highestPlayer);
@@ -488,10 +488,15 @@ Monopoly::getPlayerById(int id) {
 	PlayerLine copyLine = *line;
 	shared_ptr<Player> player;
 	for (int i = 0; i < copyLine.getNumPlayers(); i++) {
-		player = copyLine.frontLine();
-		if (player->getPlayerNum() == id) return player;
+		if (player->getPlayerNum() == id) 
+    {
+		  player = copyLine.frontLine();
+      break;
+    }
 		copyLine.nextTurn();
 	}
+
+  return player;
 }
 
 void 

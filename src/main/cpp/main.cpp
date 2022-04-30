@@ -139,7 +139,7 @@ int main()
 		game.drawBoard();
 
 		currentPlayer = game.getCurrentPlayer();
-		originalLocation = currentPlayer->getLocationNum();
+		//originalLocation = currentPlayer->getLocationNum();
 		initiallyInJail = currentPlayer->inJail();
 		
 		if(!currentPlayer->inJail()) {
